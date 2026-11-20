@@ -9,7 +9,7 @@ Inputs are drawn from one batch dict; each model lists the ones it uses in
     m : (B, N, N)     additive key mask for softmax: 0 real, MASK_NEG padded
 
 Every op is one hls4ml's PyTorch frontend can parse (nn.Linear, ReLU,
-Sigmoid, Softmax(dim=-1), einsum, mul, add, cat, squeeze): no LayerNorm,
+Sigmoid, Softmax(dim=-1), einsum, mul, add, squeeze): no LayerNorm,
 no GELU, no reshapes of the head dimension (heads are separate Linear layers).
 """
 import torch
@@ -77,7 +77,9 @@ class GDSParTL1(_QATMixin):
             self.softmax = nn.ModuleList([nn.Softmax(dim=-1) for _ in range(n_blocks * n_heads)])
         else:
             self.q_act, self.k_act = A(nn.ReLU), A(nn.ReLU)
-        self.out = nn.ModuleList([nn.Linear(embed_dim, embed_dim) for _ in range(n_blocks)])
+        # per-head output projections summed == one projection of the concatenated heads (avoids cat)
+        self.out = nn.ModuleList([nn.Linear(hd, embed_dim, bias=(i % n_heads == 0))
+                                  for i in range(n_blocks * n_heads)])
         self.ff1 = nn.ModuleList([nn.Linear(embed_dim, ffn_dim) for _ in range(n_blocks)])
         self.ff_act = nn.ModuleList([nn.ReLU() for _ in range(n_blocks)])
         self.ff2 = nn.ModuleList([nn.Linear(ffn_dim, embed_dim) for _ in range(n_blocks)])
@@ -116,8 +118,10 @@ class GDSParTL1(_QATMixin):
                     heads.append(aq(torch.einsum("bnd,bde->bne", q, kv)))
                     continue
                 heads.append(aq(torch.einsum("bnm,bmd->bnd", a, v)))
-            att = heads[0] if len(heads) == 1 else torch.cat(heads, dim=-1)
-            h = aq(h + aq(self.out[blk](att)))
+            att = aq(self.out[blk * self.n_heads](heads[0]))
+            for hh in range(1, self.n_heads):
+                att = aq(att + aq(self.out[blk * self.n_heads + hh](heads[hh])))
+            h = aq(h + att)
             h = aq(h + aq(self.ff2[blk](aq(self.ff_act[blk](self.ff1[blk](h))))))
         z = aq(torch.einsum("bnd,bn->bd", h, w))
         return self.head2(aq(self.head_act(self.head1(z))))
