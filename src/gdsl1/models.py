@@ -87,11 +87,12 @@ class GDSParTL1(_QATMixin):
         self.head_act = nn.ReLU()
         self.head2 = nn.Linear(embed_dim, n_classes)
 
-    @property
-    def inputs(self):
-        return ("x", "u", "w", "m") if self.attn == "softmax" else ("x", "u", "w")
+    inputs = ("x", "u", "w", "m")
 
-    def forward(self, x, u, w, m=None):
+    def forward(self, x, u, w, m):
+        return self._body(x, u, w, m)
+
+    def _body(self, x, u, w, m):
         aq = self.aq
         h = aq(self.embed_act(self.embed(x)))
         rel = aq(self.pair_act(self.pair(u)))                          # (B,N,N,Dp)
@@ -125,6 +126,20 @@ class GDSParTL1(_QATMixin):
             h = aq(h + aq(self.ff2[blk](aq(self.ff_act[blk](self.ff1[blk](h))))))
         z = aq(torch.einsum("bnd,bn->bd", h, w))
         return self.head2(aq(self.head_act(self.head1(z))))
+
+
+class GDSParTL1Linear(GDSParTL1):
+    """Softmax-free variant: ReLU-kernel linear attention (no key mask input).
+    Separate class so torch.fx sees a 3-input signature."""
+
+    inputs = ("x", "u", "w")
+
+    def __init__(self, **kw):
+        kw["attn"] = "linear"
+        super().__init__(**kw)
+
+    def forward(self, x, u, w):
+        return self._body(x, u, w, None)
 
 
 class DeepSetsL1(_QATMixin):
@@ -185,7 +200,7 @@ VARIANTS = {
     "mlp": (MLPL1, dict(hidden=(64, 32, 32))),
 }
 
-MODEL_CLASSES = {c.__name__: c for c in (GDSParTL1, DeepSetsL1, MLPL1)}
+MODEL_CLASSES = {c.__name__: c for c in (GDSParTL1, GDSParTL1Linear, DeepSetsL1, MLPL1)}
 
 
 def build(variant, n_particles=16, n_feat=len(STUDENT_FEATURES), n_pair=4, n_classes=10, **over):
