@@ -1,0 +1,284 @@
+{
+ "teacher_acc_same_jets": 0.09,
+ "device": {
+  "name": "xcvu13p-flga2577-2-e",
+  "DSP": 12288,
+  "LUT": 1728000,
+  "FF": 3456000,
+  "BRAM_18K": 5376
+ },
+ "clock_ns": 4.17,
+ "budget_ns": 1000.0,
+ "rows": [
+  {
+   "variant": "gds_l1_softmax",
+   "params": 2440,
+   "n_jets": 200,
+   "acc_torch_baked": 0.1,
+   "acc_torch_qat": 0.1,
+   "acc_hls": 0.095,
+   "hls_vs_qat_argmax_agree": 0.96,
+   "hls_vs_qat_max_abs_logit_diff": 0.0097808837890625,
+   "teacher_agree_hls": 0.075,
+   "trained_metrics": {},
+   "sweep": [
+    {
+     "reuse_factor": 1,
+     "cycles": 85,
+     "latency_ns": 354.45,
+     "ii": 1,
+     "dsp": 10496,
+     "lut_mult": 2232512,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.8541666666666666,
+     "lut_mult_frac": 1.291962962962963,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 2,
+     "cycles": 122,
+     "latency_ns": 508.74,
+     "ii": 2,
+     "dsp": 5248,
+     "lut_mult": 1116288,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.4270833333333333,
+     "lut_mult_frac": 0.646,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 4,
+     "cycles": 204,
+     "latency_ns": 850.68,
+     "ii": 4,
+     "dsp": 2624,
+     "lut_mult": 558144,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.21354166666666666,
+     "lut_mult_frac": 0.323,
+     "csynth": null
+    }
+   ],
+   "sec": 13.778708219528198
+  },
+  {
+   "variant": "gds_l1_linear",
+   "params": 2430,
+   "n_jets": 200,
+   "acc_torch_baked": 0.06,
+   "acc_torch_qat": 0.06,
+   "acc_hls": 0.06,
+   "hls_vs_qat_argmax_agree": 0.99,
+   "hls_vs_qat_max_abs_logit_diff": 0.0017852783203125,
+   "teacher_agree_hls": 0.09,
+   "trained_metrics": {},
+   "sweep": [
+    {
+     "reuse_factor": 1,
+     "cycles": 73,
+     "latency_ns": 304.40999999999997,
+     "ii": 1,
+     "dsp": 6144,
+     "lut_mult": 2101568,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.5,
+     "lut_mult_frac": 1.2161851851851853,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 2,
+     "cycles": 110,
+     "latency_ns": 458.7,
+     "ii": 2,
+     "dsp": 3072,
+     "lut_mult": 1050816,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.25,
+     "lut_mult_frac": 0.6081111111111112,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 4,
+     "cycles": 192,
+     "latency_ns": 800.64,
+     "ii": 4,
+     "dsp": 1536,
+     "lut_mult": 525440,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.125,
+     "lut_mult_frac": 0.30407407407407405,
+     "csynth": null
+    }
+   ],
+   "sec": 8.413884401321411
+  },
+  {
+   "variant": "gds_l1_nogate",
+   "params": 2280,
+   "n_jets": 200,
+   "acc_torch_baked": 0.085,
+   "acc_torch_qat": 0.085,
+   "acc_hls": 0.085,
+   "hls_vs_qat_argmax_agree": 0.995,
+   "hls_vs_qat_max_abs_logit_diff": 0.01068115234375,
+   "teacher_agree_hls": 0.1,
+   "trained_metrics": {},
+   "sweep": [
+    {
+     "reuse_factor": 1,
+     "cycles": 80,
+     "latency_ns": 333.6,
+     "ii": 1,
+     "dsp": 8960,
+     "lut_mult": 2103360,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.7291666666666666,
+     "lut_mult_frac": 1.2172222222222222,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 2,
+     "cycles": 121,
+     "latency_ns": 504.57,
+     "ii": 2,
+     "dsp": 4480,
+     "lut_mult": 1051712,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.3645833333333333,
+     "lut_mult_frac": 0.6086296296296296,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 4,
+     "cycles": 203,
+     "latency_ns": 846.51,
+     "ii": 4,
+     "dsp": 2240,
+     "lut_mult": 525888,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.18229166666666666,
+     "lut_mult_frac": 0.30433333333333334,
+     "csynth": null
+    }
+   ],
+   "sec": 12.244437456130981
+  },
+  {
+   "variant": "deepsets",
+   "params": 2794,
+   "n_jets": 200,
+   "acc_torch_baked": 0.165,
+   "acc_torch_qat": 0.165,
+   "acc_hls": 0.165,
+   "hls_vs_qat_argmax_agree": 1.0,
+   "hls_vs_qat_max_abs_logit_diff": 0.0017852783203125,
+   "teacher_agree_hls": 0.1,
+   "trained_metrics": {},
+   "sweep": [
+    {
+     "reuse_factor": 1,
+     "cycles": 36,
+     "latency_ns": 150.12,
+     "ii": 1,
+     "dsp": 512,
+     "lut_mult": 1415360,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.041666666666666664,
+     "lut_mult_frac": 0.8190740740740741,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 2,
+     "cycles": 63,
+     "latency_ns": 262.71,
+     "ii": 2,
+     "dsp": 256,
+     "lut_mult": 707712,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.020833333333333332,
+     "lut_mult_frac": 0.40955555555555556,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 4,
+     "cycles": 117,
+     "latency_ns": 487.89,
+     "ii": 4,
+     "dsp": 128,
+     "lut_mult": 353856,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.010416666666666666,
+     "lut_mult_frac": 0.20477777777777778,
+     "csynth": null
+    }
+   ],
+   "sec": 5.321675777435303
+  },
+  {
+   "variant": "mlp",
+   "params": 13770,
+   "n_jets": 200,
+   "acc_torch_baked": 0.105,
+   "acc_torch_qat": 0.105,
+   "acc_hls": 0.105,
+   "hls_vs_qat_argmax_agree": 1.0,
+   "hls_vs_qat_max_abs_logit_diff": 0.0016021728515625,
+   "teacher_agree_hls": 0.145,
+   "trained_metrics": {},
+   "sweep": [
+    {
+     "reuse_factor": 1,
+     "cycles": 35,
+     "latency_ns": 145.95,
+     "ii": 1,
+     "dsp": 0,
+     "lut_mult": 795392,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.0,
+     "lut_mult_frac": 0.4602962962962963,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 2,
+     "cycles": 67,
+     "latency_ns": 279.39,
+     "ii": 2,
+     "dsp": 0,
+     "lut_mult": 397760,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.0,
+     "lut_mult_frac": 0.2301851851851852,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 4,
+     "cycles": 131,
+     "latency_ns": 546.27,
+     "ii": 4,
+     "dsp": 0,
+     "lut_mult": 198912,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.0,
+     "lut_mult_frac": 0.11511111111111111,
+     "csynth": null
+    }
+   ],
+   "sec": 5.9460289478302
+  }
+ ]
+}

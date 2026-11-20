@@ -1,0 +1,18 @@
+{
+  "id": "avinashchandragupta/gds-part-l1t-hls-cpu",
+  "title": "GDS-ParT L1T hls CPU",
+  "code_file": "run.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": [
+    "suryatrainer/jetclass-train-part0",
+    "suryatrainer/jetclass-val",
+    "avinashchandragupta/gds-part-teacher"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

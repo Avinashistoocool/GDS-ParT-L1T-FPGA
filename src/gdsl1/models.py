@@ -195,7 +195,7 @@ VARIANTS = {
     "gds_l1_linear": (GDSParTL1, dict(embed_dim=16, pair_dim=4, n_heads=2, n_blocks=1,
                                       ffn_dim=16, attn="linear")),
     "gds_l1_nogate": (GDSParTL1, dict(embed_dim=16, pair_dim=4, n_heads=2, n_blocks=1,
-                                      ffn_dim=16, attn="softmax", gate=False, pair_bias=False)),
+                                      ffn_dim=16, attn="softmax", gate=False, pair_bias=True)),
     "deepsets": (DeepSetsL1, dict(phi_dim=32, rho_dim=32)),
     "mlp": (MLPL1, dict(hidden=(64, 32, 32))),
 }

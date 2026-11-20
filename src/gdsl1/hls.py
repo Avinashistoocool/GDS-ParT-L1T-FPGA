@@ -1,4 +1,4 @@
-"""hls4ml conversion, bit-accurate emulation and latency/resource estimates.
+﻿"""hls4ml conversion, bit-accurate emulation and latency/resource estimates.
 
 Works around five issues in hls4ml 1.3's PyTorch frontend found while
 building this project (each one is validated in tests/test_hls.py):
@@ -125,13 +125,32 @@ def input_shapes(model, n_particles, n_feat=10, n_pair=4):
     return [s[k] for k in model.inputs]
 
 
+def _positions_per_layer(model, shapes):
+    """hls4ml layer name -> number of particle/pair positions of each nn.Linear
+    applied to a rank>=2 tensor (used as its ParallelizationFactor)."""
+    import torch
+    out, hooks = {}, []
+    for name, mod in model.named_modules():
+        if isinstance(mod, torch.nn.Linear):
+            def hook(m, i, o, name=name):
+                if o.dim() > 2:
+                    out[name.replace(".", "_")] = int(np.prod(o.shape[1:-1]))
+            hooks.append(mod.register_forward_hook(hook))
+    with torch.no_grad():
+        model(*[torch.zeros(1, *s) for s in shapes])
+    for h in hooks:
+        h.remove()
+    return out
+
+
 def hls_config(model, shapes, quant, reuse_factor=1, strategy="Latency", table_bits=10,
-               accum=None):
+               accum=None, parallel=None):
     """Per-layer config mirroring the QAT precision plan.
     quant: dict {"weight": [W,I], "bias": [W,I], "act": [W,I]}."""
     import hls4ml
     W = lambda k: "ap_fixed<{},{},AP_RND_CONV,AP_SAT>".format(*quant[k])
     act = W("act")
+    positions = _positions_per_layer(model, shapes)
     acc = accum or "ap_fixed<{},{},AP_RND_CONV,AP_SAT>".format(quant["act"][0] + 8, quant["act"][1] + 6)
     cfg = hls4ml.utils.config_from_pytorch_model(
         model, input_shape=shapes, granularity="name", backend="Vitis",
@@ -140,6 +159,11 @@ def hls_config(model, shapes, quant, reuse_factor=1, strategy="Latency", table_b
     cfg["Model"]["Strategy"] = strategy
     for name, lc in cfg["LayerName"].items():
         lc["ReuseFactor"] = reuse_factor
+        # Dense on (N, D) / (N, N, P) tensors becomes a pointwise conv whose default
+        # ParallelizationFactor=1 processes one particle (pair) per clock. At L1 all
+        # positions run in parallel; hls4ml clamps this to the largest valid value.
+        if name in positions:
+            lc["ParallelizationFactor"] = parallel or positions[name]
         prec = lc.get("Precision")
         if not isinstance(prec, dict):
             continue
@@ -160,13 +184,14 @@ def hls_config(model, shapes, quant, reuse_factor=1, strategy="Latency", table_b
 
 
 def convert(model, out_dir, n_particles, quant, reuse_factor=1, strategy="Latency",
-            part="xcvu13p-flga2577-2-e", clock_period=4.17, compile=True, verbose=False):
+            part="xcvu13p-flga2577-2-e", clock_period=4.17, compile=True, verbose=False,
+            parallel=None):
     """model: float or QAT-baked student (eval mode). Returns hls4ml ModelGraph."""
     apply_patches()
     import hls4ml
     model = model.cpu().eval()
     shapes = input_shapes(model, n_particles, model.cfg["n_feat"], model.cfg["n_pair"])
-    cfg = hls_config(model, shapes, quant, reuse_factor, strategy)
+    cfg = hls_config(model, shapes, quant, reuse_factor, strategy, parallel=parallel)
     hm = hls4ml.converters.convert_from_pytorch_model(
         model, input_shape=shapes, hls_config=cfg, output_dir=out_dir, backend="Vitis",
         io_type="io_parallel", part=part, clock_period=clock_period,
@@ -192,31 +217,32 @@ def _shape(layer):
 
 
 def estimate(hm, reuse_factor=1, clock_ns=4.17, dsp_min_bits=10):
-    """Per-layer multiplier count and pipeline depth for io_parallel/Latency.
+    """Analytic per-layer multiplier count and critical-path pipeline depth
+    for io_parallel / Latency strategy. NOT a synthesis result.
 
-    Model (documented in docs/ESTIMATES.md):
-      Dense / pointwise conv:  mults = positions*n_in*n_out (zero weights pruned),
-                               depth = 1 (mult) + ceil(log2 n_in) (adder tree) + 1,
-                               then * reuse_factor
-      Einsum:                  mults = prod(out)*contract, depth = 1 + ceil(log2 contract) + 1
+    Model (see docs/ESTIMATES.md):
+      Dense / pointwise conv:  mults = positions*nonzero(W) / n_partitions,
+                               depth = (2 + ceil(log2 n_in)) * RF + (n_partitions - 1)
+      Einsum:                  mults = prod(out)*contract, depth = 2 + ceil(log2 contract)
       Merge(mul):              mults = prod(out), depth 1;  Merge(add): depth 1
       Activation (ReLU):       depth 1;  Sigmoid/Tanh (LUT): depth 2
-      Softmax (stable, LUT):   depth = 2 (max tree log2 n) + 2 (exp LUT) + log2 n (sum) + 2 (inv LUT) + 1
-    Multipliers whose operands are both >= dsp_min_bits wide go to DSP48s,
-    narrower ones to LUTs (~ W_a*W_b/2 LUTs each, Vivado's usual mapping).
+      Softmax (stable, LUT):   depth = 6 + 2*ceil(log2 n), mults = prod(out)
+    Latency = longest path through the layer DAG (parallel branches overlap).
+    Multipliers with both operands >= dsp_min_bits wide map to DSP48s, the
+    rest to LUT fabric (~W_a*W_b/2 LUTs each, Vivado's usual mapping).
     """
-    rows, total_cycles, dsp, lut_mult = [], 0, 0, 0
+    rows, dsp, lut_mult, finish = [], 0, 0, {}
     for layer in hm.get_layers():
         cls = layer.class_name
         out = _shape(layer)
         npos = int(np.prod(out[:-1])) if len(out) > 1 else 1
-        mults, depth = 0, 1
+        mults, depth, wp, ip = 0, 1, 0, 0
         if cls in ("Dense", "PointwiseConv1D", "PointwiseConv2D", "Conv1D", "Conv2D"):
             w = layer.get_weights("weight").data
             n_in = int(layer.get_attr("n_in") or layer.get_attr("n_chan"))
-            nz = int(np.count_nonzero(w))
-            mults = npos * nz
-            depth = (2 + math.ceil(math.log2(max(n_in, 2)))) * reuse_factor
+            n_part = int(layer.get_attr("n_partitions") or 1) if "Conv" in cls else 1
+            mults = npos * int(np.count_nonzero(w)) // n_part
+            depth = (2 + math.ceil(math.log2(max(n_in, 2)))) * reuse_factor + (n_part - 1)
             wp = layer.get_attr("weight_t").precision.width
             ip = layer.get_input_variable().type.precision.width
         elif cls == "Einsum":
@@ -234,25 +260,28 @@ def estimate(hm, reuse_factor=1, clock_ns=4.17, dsp_min_bits=10):
         elif cls == "Merge":
             if layer.get_attr("op") in ("multiply", "mul"):
                 mults = int(np.prod(out))
-            depth = 1
             wp = ip = layer.get_input_variable().type.precision.width
         elif cls == "Softmax":
-            n = out[-1]
-            depth = 6 + 2 * math.ceil(math.log2(max(n, 2)))
-            mults = int(np.prod(out))  # exp * inv
-            wp, ip = 18, 18
-        elif cls in ("Activation",):
+            depth = 6 + 2 * math.ceil(math.log2(max(out[-1], 2)))
+            mults = int(np.prod(out))
+            wp = ip = 18
+        elif cls == "Activation":
             depth = 2 if layer.get_attr("activation") in ("sigmoid", "tanh") else 1
-        elif cls in ("Input", "Reshape", "Concatenate", "Transpose"):
+        elif cls in ("Input", "Reshape", "Transpose"):
             depth = 0
         if mults:
             if min(wp, ip) >= dsp_min_bits:
                 dsp += math.ceil(mults / reuse_factor)
             else:
                 lut_mult += math.ceil(mults / reuse_factor) * (wp * ip) // 2
-        total_cycles += depth
-        rows.append({"layer": layer.name, "class": cls, "out": out, "mults": mults, "cycles": depth})
-    return {"cycles": total_cycles, "latency_ns": total_cycles * clock_ns, "ii": reuse_factor,
+        start = max([finish.get(i, 0) for i in layer.inputs] or [0])
+        finish[layer.name] = start + depth
+        for o in layer.outputs:
+            finish[o] = finish[layer.name]
+        rows.append({"layer": layer.name, "class": cls, "out": out, "mults": mults,
+                     "cycles": depth, "done_at": finish[layer.name]})
+    cycles = max(finish.values())
+    return {"cycles": cycles, "latency_ns": cycles * clock_ns, "ii": reuse_factor,
             "dsp": dsp, "lut_mult": lut_mult, "layers": rows, "clock_ns": clock_ns}
 
 
