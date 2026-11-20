@@ -1,0 +1,11 @@
+torch>=2.2
+numpy
+pytest
+# data pipeline (Kaggle kernels)
+uproot
+awkward
+# hls4ml conversion; needs Python <=3.13 (tested 3.12, hls4ml 1.3.0)
+hls4ml==1.3.0
+quantizers<2
+# Windows only: C++ compiler for hls4ml C-simulation
+ziglang; platform_system == "Windows"
