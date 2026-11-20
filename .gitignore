@@ -1,0 +1,10 @@
+scratch/
+__pycache__/
+*.pyc
+hls/prj*/
+outputs/
+*.pt
+*.npz
+*.dll
+*.so
+.pytest_cache/
