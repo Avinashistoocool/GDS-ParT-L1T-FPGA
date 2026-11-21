@@ -108,8 +108,9 @@ class GDSParTL1(_QATMixin):
                 if self.attn == "softmax":
                     logits = aq(torch.einsum("bnd,bmd->bnm", q, k))
                     if self.use_bias:
-                        logits = logits + aq(self.bias[i](rel).squeeze(-1))
-                    logits = logits + m
+                        logits = aq(logits + aq(self.bias[i](rel).squeeze(-1)))
+                    # every sum is saturated like the HLS ap_fixed result type
+                    logits = aq(logits + m)
                     a = aq(self.softmax[i](logits))
                 else:
                     # out_n = sum_m w_m relu(q_n).relu(k_m) v_m ; w (=mask/N) drops padding

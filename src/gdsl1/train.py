@@ -272,7 +272,9 @@ def main(argv=None):
                        for s in ("val", "test")}
         say(f"teacher accuracy (full jet, 128 particles): {teacher_ref}")
         # compact copy of the test view for bit-accurate hls4ml emulation
-        sub = {k: v[:20000] for k, v in arrays["test"].items()}
+        # (random, not the first rows: the cache is sorted by class)
+        pick = np.sort(np.random.default_rng(7).permutation(len(arrays["test"]["y"]))[:20000])
+        sub = {k: v[pick] for k, v in arrays["test"].items()}
         np.savez_compressed(os.path.join(args.out, "test_subset.npz"), **sub)
         train = ArrayLoader(arrays["train"], args.batch_size, True, device, args.seed)
         val = ArrayLoader(arrays["val"], 4096, False, device)

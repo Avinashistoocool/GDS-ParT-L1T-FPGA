@@ -1,0 +1,166 @@
+{
+ "teacher": {
+  "val": 0.84905,
+  "test": 0.8429
+ },
+ "n_particles": 16,
+ "args": {
+  "synthetic": false,
+  "train_dir": "/kaggle/input/datasets/suryatrainer/jetclass-train-part0/train_data",
+  "val_dir": "/kaggle/input/datasets/suryatrainer/jetclass-val/val_data",
+  "teacher": "/kaggle/input/datasets/avinashchandragupta/gds-part-teacher/teacher_v2_shared_10M_10ep.pt",
+  "cache_dir": "/kaggle/working/_cache",
+  "jets_per_class": 15000,
+  "val_jets_per_class": 4000,
+  "test_frac": 0.5,
+  "variants": "gds_l1_softmax,gds_l1_linear,gds_l1_nogate,deepsets,mlp",
+  "n_particles": 16,
+  "epochs": 8,
+  "qat_epochs": 3,
+  "max_steps": null,
+  "batch_size": 1024,
+  "lr": 0.003,
+  "alpha": 0.3,
+  "T": 4.0,
+  "w_bits": 8,
+  "w_int": 2,
+  "b_bits": 16,
+  "b_int": 6,
+  "a_bits": 16,
+  "a_int": 6,
+  "seed": 0,
+  "out": "/kaggle/working/outputs"
+ },
+ "students": [
+  {
+   "variant": "gds_l1_softmax",
+   "n_params": 2440,
+   "metrics": {
+    "float_val": {
+     "acc": 0.53605,
+     "loss": 1.35192109375,
+     "teacher_agreement": 0.56075
+    },
+    "float_test": {
+     "acc": 0.5302,
+     "loss": 1.361250244140625,
+     "teacher_agreement": 0.5569
+    },
+    "qat_val": {
+     "acc": 0.5361,
+     "loss": 1.345271826171875,
+     "teacher_agreement": 0.5609
+    },
+    "qat_test": {
+     "acc": 0.53285,
+     "loss": 1.3549140380859375,
+     "teacher_agreement": 0.55955
+    }
+   }
+  },
+  {
+   "variant": "gds_l1_linear",
+   "n_params": 2430,
+   "metrics": {
+    "float_val": {
+     "acc": 0.51725,
+     "loss": 1.3807968872070313,
+     "teacher_agreement": 0.54325
+    },
+    "float_test": {
+     "acc": 0.5146,
+     "loss": 1.3867177124023438,
+     "teacher_agreement": 0.5419
+    },
+    "qat_val": {
+     "acc": 0.52145,
+     "loss": 1.363257373046875,
+     "teacher_agreement": 0.54615
+    },
+    "qat_test": {
+     "acc": 0.51865,
+     "loss": 1.3684669311523439,
+     "teacher_agreement": 0.5457
+    }
+   }
+  },
+  {
+   "variant": "gds_l1_nogate",
+   "n_params": 2280,
+   "metrics": {
+    "float_val": {
+     "acc": 0.52065,
+     "loss": 1.3943472778320312,
+     "teacher_agreement": 0.54325
+    },
+    "float_test": {
+     "acc": 0.5126,
+     "loss": 1.4063882080078125,
+     "teacher_agreement": 0.5379
+    },
+    "qat_val": {
+     "acc": 0.52645,
+     "loss": 1.3796306762695312,
+     "teacher_agreement": 0.5495
+    },
+    "qat_test": {
+     "acc": 0.5195,
+     "loss": 1.39102802734375,
+     "teacher_agreement": 0.544
+    }
+   }
+  },
+  {
+   "variant": "deepsets",
+   "n_params": 2794,
+   "metrics": {
+    "float_val": {
+     "acc": 0.4357,
+     "loss": 1.593600146484375,
+     "teacher_agreement": 0.45515
+    },
+    "float_test": {
+     "acc": 0.4246,
+     "loss": 1.6021628662109375,
+     "teacher_agreement": 0.4484
+    },
+    "qat_val": {
+     "acc": 0.4419,
+     "loss": 1.5836404418945313,
+     "teacher_agreement": 0.46185
+    },
+    "qat_test": {
+     "acc": 0.42955,
+     "loss": 1.5922371337890624,
+     "teacher_agreement": 0.4545
+    }
+   }
+  },
+  {
+   "variant": "mlp",
+   "n_params": 13770,
+   "metrics": {
+    "float_val": {
+     "acc": 0.44365,
+     "loss": 1.561562158203125,
+     "teacher_agreement": 0.4568
+    },
+    "float_test": {
+     "acc": 0.44465,
+     "loss": 1.5652382446289062,
+     "teacher_agreement": 0.4633
+    },
+    "qat_val": {
+     "acc": 0.44915,
+     "loss": 1.554512841796875,
+     "teacher_agreement": 0.4622
+    },
+    "qat_test": {
+     "acc": 0.4507,
+     "loss": 1.5576480346679686,
+     "teacher_agreement": 0.46925
+    }
+   }
+  }
+ ]
+}

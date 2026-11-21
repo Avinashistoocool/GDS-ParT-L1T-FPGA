@@ -12,9 +12,9 @@ budget on an FPGA (hls4ml), and measure how much accuracy is lost relative to th
 | M2 | KD + fixed-point QAT training loop. 1-step synthetic run verified locally (`tests/test_smoke.py`) | done |
 | M3 | hls4ml conversion, bit-accurate C-sim matching PyTorch for all variants (`tests/test_hls.py`), 5 frontend fixes | done |
 | M4 | Reuse-factor sweep + analytic latency/DSP table (`hls/results_synthetic/RESULTS.md`, untrained weights) | done |
-| M5 | Full-size distillation on Kaggle GPU (`gds-part-l1t-distill`, 3M jets) | pushed. Waiting for a GPU slot (Kaggle limit of 2 concurrent GPU sessions) |
-| M5b | Small CPU-only distillation + hls4ml on Kaggle (`gds-part-l1t-hls-cpu`, 150k jets) | running |
-| M6 | Trained-student table: accuracy vs teacher vs latency vs resources (`hls/results/RESULTS.md`) | pending M5 |
+| M5 | Full-size distillation on Kaggle GPU (`gds-part-l1t-distill`, 3M jets, T4, 20+6 epochs) | done (v2). v3 with the saturation fix and balanced emulation subset is queued for a GPU slot |
+| M5b | Small CPU-only distillation + hls4ml on Kaggle (`gds-part-l1t-hls-cpu`, 150k jets) | done |
+| M6 | Trained-student table: accuracy vs teacher vs latency vs resources ([docs/RESULTS.md](RESULTS.md)) | done (estimates) |
 | M7 | Real Vitis HLS C-synthesis (+ Vivado OOC) on a Linux lab machine (`scripts/synth.sh`) | pending: no Vitis on the dev box |
 | M8 | Resource reduction to fit comfortably at RF ≤ 2: 6-bit weights / HGQ-style per-layer bit widths, pruning, N=8/12 particles, `distributed_arithmetic` strategy | todo |
 | M9 | Realistic L1 inputs: Phase-2 L1 PUPPI candidates / jets (CMS L1T simulation or Open Data) instead of JetClass offline particles, plus fixed-point input encoding | todo |

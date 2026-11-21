@@ -1,0 +1,454 @@
+{
+ "teacher_acc_same_jets": 0.8294,
+ "device": {
+  "name": "xcvu13p-flga2577-2-e",
+  "DSP": 12288,
+  "LUT": 1728000,
+  "FF": 3456000,
+  "BRAM_18K": 5376
+ },
+ "clock_ns": 4.17,
+ "budget_ns": 1000.0,
+ "rows": [
+  {
+   "variant": "deepsets",
+   "params": 2794,
+   "n_jets": 5000,
+   "acc_torch_baked": 0.3208,
+   "acc_torch_qat": 0.3208,
+   "acc_hls": 0.321,
+   "hls_vs_qat_argmax_agree": 0.997,
+   "hls_vs_qat_max_abs_logit_diff": 0.023040771484375,
+   "teacher_agree_hls": 0.3666,
+   "trained_metrics": {
+    "float_val": {
+     "acc": 0.4357,
+     "loss": 1.593600146484375,
+     "teacher_agreement": 0.45515
+    },
+    "float_test": {
+     "acc": 0.4246,
+     "loss": 1.6021628662109375,
+     "teacher_agreement": 0.4484
+    },
+    "qat_val": {
+     "acc": 0.4419,
+     "loss": 1.5836404418945313,
+     "teacher_agreement": 0.46185
+    },
+    "qat_test": {
+     "acc": 0.42955,
+     "loss": 1.5922371337890624,
+     "teacher_agreement": 0.4545
+    }
+   },
+   "sweep": [
+    {
+     "reuse_factor": 1,
+     "cycles": 36,
+     "latency_ns": 150.12,
+     "ii": 1,
+     "dsp": 512,
+     "lut_mult": 1424960,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.041666666666666664,
+     "lut_mult_frac": 0.8246296296296296,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 2,
+     "cycles": 63,
+     "latency_ns": 262.71,
+     "ii": 2,
+     "dsp": 256,
+     "lut_mult": 712512,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.020833333333333332,
+     "lut_mult_frac": 0.41233333333333333,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 4,
+     "cycles": 117,
+     "latency_ns": 487.89,
+     "ii": 4,
+     "dsp": 128,
+     "lut_mult": 356288,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.010416666666666666,
+     "lut_mult_frac": 0.2061851851851852,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 8,
+     "cycles": 225,
+     "latency_ns": 938.25,
+     "ii": 8,
+     "dsp": 64,
+     "lut_mult": 178176,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.005208333333333333,
+     "lut_mult_frac": 0.10311111111111111,
+     "csynth": null
+    }
+   ],
+   "sec": 14.060663223266602
+  },
+  {
+   "variant": "gds_l1_linear",
+   "params": 2430,
+   "n_jets": 5000,
+   "acc_torch_baked": 0.3714,
+   "acc_torch_qat": 0.3706,
+   "acc_hls": 0.3698,
+   "hls_vs_qat_argmax_agree": 0.9876,
+   "hls_vs_qat_max_abs_logit_diff": 0.2386474609375,
+   "teacher_agree_hls": 0.412,
+   "trained_metrics": {
+    "float_val": {
+     "acc": 0.51725,
+     "loss": 1.3807968872070313,
+     "teacher_agreement": 0.54325
+    },
+    "float_test": {
+     "acc": 0.5146,
+     "loss": 1.3867177124023438,
+     "teacher_agreement": 0.5419
+    },
+    "qat_val": {
+     "acc": 0.52145,
+     "loss": 1.363257373046875,
+     "teacher_agreement": 0.54615
+    },
+    "qat_test": {
+     "acc": 0.51865,
+     "loss": 1.3684669311523439,
+     "teacher_agreement": 0.5457
+    }
+   },
+   "sweep": [
+    {
+     "reuse_factor": 1,
+     "cycles": 73,
+     "latency_ns": 304.40999999999997,
+     "ii": 1,
+     "dsp": 6144,
+     "lut_mult": 2109312,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.5,
+     "lut_mult_frac": 1.2206666666666666,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 2,
+     "cycles": 110,
+     "latency_ns": 458.7,
+     "ii": 2,
+     "dsp": 3072,
+     "lut_mult": 1054720,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.25,
+     "lut_mult_frac": 0.6103703703703703,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 4,
+     "cycles": 192,
+     "latency_ns": 800.64,
+     "ii": 4,
+     "dsp": 1536,
+     "lut_mult": 527360,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.125,
+     "lut_mult_frac": 0.30518518518518517,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 8,
+     "cycles": 356,
+     "latency_ns": 1484.52,
+     "ii": 8,
+     "dsp": 768,
+     "lut_mult": 263680,
+     "clock_ns": 4.17,
+     "fits_budget": false,
+     "dsp_frac": 0.0625,
+     "lut_mult_frac": 0.15259259259259259,
+     "csynth": null
+    }
+   ],
+   "sec": 27.194246768951416
+  },
+  {
+   "variant": "gds_l1_nogate",
+   "params": 2280,
+   "n_jets": 5000,
+   "acc_torch_baked": 0.3656,
+   "acc_torch_qat": 0.3656,
+   "acc_hls": 0.3596,
+   "hls_vs_qat_argmax_agree": 0.973,
+   "hls_vs_qat_max_abs_logit_diff": 1.00262451171875,
+   "teacher_agree_hls": 0.3992,
+   "trained_metrics": {
+    "float_val": {
+     "acc": 0.52065,
+     "loss": 1.3943472778320312,
+     "teacher_agreement": 0.54325
+    },
+    "float_test": {
+     "acc": 0.5126,
+     "loss": 1.4063882080078125,
+     "teacher_agreement": 0.5379
+    },
+    "qat_val": {
+     "acc": 0.52645,
+     "loss": 1.3796306762695312,
+     "teacher_agreement": 0.5495
+    },
+    "qat_test": {
+     "acc": 0.5195,
+     "loss": 1.39102802734375,
+     "teacher_agreement": 0.544
+    }
+   },
+   "sweep": [
+    {
+     "reuse_factor": 1,
+     "cycles": 80,
+     "latency_ns": 333.6,
+     "ii": 1,
+     "dsp": 8960,
+     "lut_mult": 2102656,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.7291666666666666,
+     "lut_mult_frac": 1.2168148148148148,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 2,
+     "cycles": 121,
+     "latency_ns": 504.57,
+     "ii": 2,
+     "dsp": 4480,
+     "lut_mult": 1051392,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.3645833333333333,
+     "lut_mult_frac": 0.6084444444444445,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 4,
+     "cycles": 203,
+     "latency_ns": 846.51,
+     "ii": 4,
+     "dsp": 2240,
+     "lut_mult": 525760,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.18229166666666666,
+     "lut_mult_frac": 0.3042592592592593,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 8,
+     "cycles": 367,
+     "latency_ns": 1530.3899999999999,
+     "ii": 8,
+     "dsp": 1120,
+     "lut_mult": 262912,
+     "clock_ns": 4.17,
+     "fits_budget": false,
+     "dsp_frac": 0.09114583333333333,
+     "lut_mult_frac": 0.15214814814814814,
+     "csynth": null
+    }
+   ],
+   "sec": 34.22653841972351
+  },
+  {
+   "variant": "gds_l1_softmax",
+   "params": 2440,
+   "n_jets": 5000,
+   "acc_torch_baked": 0.3924,
+   "acc_torch_qat": 0.3922,
+   "acc_hls": 0.3828,
+   "hls_vs_qat_argmax_agree": 0.9612,
+   "hls_vs_qat_max_abs_logit_diff": 0.7172393798828125,
+   "teacher_agree_hls": 0.4306,
+   "trained_metrics": {
+    "float_val": {
+     "acc": 0.53605,
+     "loss": 1.35192109375,
+     "teacher_agreement": 0.56075
+    },
+    "float_test": {
+     "acc": 0.5302,
+     "loss": 1.361250244140625,
+     "teacher_agreement": 0.5569
+    },
+    "qat_val": {
+     "acc": 0.5361,
+     "loss": 1.345271826171875,
+     "teacher_agreement": 0.5609
+    },
+    "qat_test": {
+     "acc": 0.53285,
+     "loss": 1.3549140380859375,
+     "teacher_agreement": 0.55955
+    }
+   },
+   "sweep": [
+    {
+     "reuse_factor": 1,
+     "cycles": 85,
+     "latency_ns": 354.45,
+     "ii": 1,
+     "dsp": 10496,
+     "lut_mult": 2226624,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.8541666666666666,
+     "lut_mult_frac": 1.2885555555555555,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 2,
+     "cycles": 122,
+     "latency_ns": 508.74,
+     "ii": 2,
+     "dsp": 5248,
+     "lut_mult": 1113344,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.4270833333333333,
+     "lut_mult_frac": 0.6442962962962963,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 4,
+     "cycles": 204,
+     "latency_ns": 850.68,
+     "ii": 4,
+     "dsp": 2624,
+     "lut_mult": 556736,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.21354166666666666,
+     "lut_mult_frac": 0.3221851851851852,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 8,
+     "cycles": 368,
+     "latency_ns": 1534.56,
+     "ii": 8,
+     "dsp": 1312,
+     "lut_mult": 278400,
+     "clock_ns": 4.17,
+     "fits_budget": false,
+     "dsp_frac": 0.10677083333333333,
+     "lut_mult_frac": 0.16111111111111112,
+     "csynth": null
+    }
+   ],
+   "sec": 37.876919746398926
+  },
+  {
+   "variant": "mlp",
+   "params": 13770,
+   "n_jets": 5000,
+   "acc_torch_baked": 0.3472,
+   "acc_torch_qat": 0.3472,
+   "acc_hls": 0.3474,
+   "hls_vs_qat_argmax_agree": 0.997,
+   "hls_vs_qat_max_abs_logit_diff": 0.02276611328125,
+   "teacher_agree_hls": 0.3868,
+   "trained_metrics": {
+    "float_val": {
+     "acc": 0.44365,
+     "loss": 1.561562158203125,
+     "teacher_agreement": 0.4568
+    },
+    "float_test": {
+     "acc": 0.44465,
+     "loss": 1.5652382446289062,
+     "teacher_agreement": 0.4633
+    },
+    "qat_val": {
+     "acc": 0.44915,
+     "loss": 1.554512841796875,
+     "teacher_agreement": 0.4622
+    },
+    "qat_test": {
+     "acc": 0.4507,
+     "loss": 1.5576480346679686,
+     "teacher_agreement": 0.46925
+    }
+   },
+   "sweep": [
+    {
+     "reuse_factor": 1,
+     "cycles": 35,
+     "latency_ns": 145.95,
+     "ii": 1,
+     "dsp": 0,
+     "lut_mult": 808256,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.0,
+     "lut_mult_frac": 0.46774074074074073,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 2,
+     "cycles": 67,
+     "latency_ns": 279.39,
+     "ii": 2,
+     "dsp": 0,
+     "lut_mult": 404224,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.0,
+     "lut_mult_frac": 0.23392592592592593,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 4,
+     "cycles": 131,
+     "latency_ns": 546.27,
+     "ii": 4,
+     "dsp": 0,
+     "lut_mult": 202176,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.0,
+     "lut_mult_frac": 0.117,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 8,
+     "cycles": 259,
+     "latency_ns": 1080.03,
+     "ii": 8,
+     "dsp": 0,
+     "lut_mult": 101184,
+     "clock_ns": 4.17,
+     "fits_budget": false,
+     "dsp_frac": 0.0,
+     "lut_mult_frac": 0.058555555555555555,
+     "csynth": null
+    }
+   ],
+   "sec": 12.285701036453247
+  }
+ ]
+}

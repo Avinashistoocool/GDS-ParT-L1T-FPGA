@@ -6,11 +6,30 @@ GDS-ParT into L1-sized students, trains them with fixed-point quantization-aware
 training, converts them to FPGA firmware with **hls4ml**, and compares accuracy,
 latency and resources against the L1 budget.
 
-> Status: pipeline implemented and verified on synthetic data; the hls4ml
-> C-simulation matches PyTorch. Training on JetClass runs on Kaggle. Latency and
-> resource numbers here are **analytic estimates**. Real Vitis HLS synthesis is
-> scripted (`scripts/synth.sh`) but has not been run. See [docs/PLAN.md](docs/PLAN.md).
+> **Status.** Students were trained on Kaggle (T4, 3M JetClass jets) and converted with hls4ml. The firmware's
+> C-simulation reproduces the PyTorch QAT model. Latency and resource numbers are **analytic estimates**. Real Vitis HLS
+> synthesis is scripted (`scripts/synth.sh`) but has not been run. Details: [docs/RESULTS.md](docs/RESULTS.md),
+> plan: [docs/PLAN.md](docs/PLAN.md).
 
+## Headline results
+
+Test accuracy is 10-class JetClass. The teacher is the dense GDS-ParT: 2.07M params, 128 particles, **0.848**.
+The C-sim column is the bit-accurate firmware accuracy on 20k class-balanced test jets. Latency and DSP numbers are
+*estimates* for xcvu13p at 240 MHz.
+
+| L1 student (16 particles, 10 L1 features) | params | QAT test acc (250k jets) | hls4ml C-sim acc | est. latency RF=1 / RF=4 | est. DSP RF=1 / RF=4 |
+|---|---|---|---|---|---|
+| GDS-ParT-L1, linear attention | 2,430 | **0.634** | 0.637 | 304 / 801 ns | 6,144 / 1,536 |
+| GDS-ParT-L1, softmax | 2,440 | 0.626 | 0.625 | 354 / 851 ns | 10,496 / 2,624 |
+| GDS-ParT-L1, no gates | 2,280 | 0.625 | 0.624 | 334 / 847 ns | 8,960 / 2,240 |
+| DeepSets | 2,794 | 0.582 | 0.582 | 150 / 488 ns | 512 / 128 |
+| MLP | 13,770 | 0.580 | 0.582 | 146 / 546 ns | 0 / 0 (LUTs) |
+
+* All students are estimated to fit a ~1 µs L1 algorithm budget at RF ≤ 4 (II = RF × 4.17 ns).
+* The transformer students beat the DeepSets and MLP baselines by about 5 points but are still 21 points below the
+  teacher. The 16-particle, no-impact-parameter L1 view is the main loss.
+* Resources, not latency, are the problem. At RF=1 the softmax student needs ~85% of the VU13P DSPs. RF=4 brings it to ~21%.
+* The relational-gate ablation shows no measurable gain at this size.
 ## Why the full model cannot be used directly
 
 The teacher (`checkpoints/v2_shared_10M_10ep`, 2.07M params, 84.8% test accuracy on
@@ -78,7 +97,7 @@ comparing C-sim to PyTorch:
 4. The `dlclose`/`g++`/`bash` steps assume Linux. On Windows we compile with `ziglang`.
 5. Pointwise layers default to `ParallelizationFactor=1`, which serialises the particles. We set it per layer.
 
-### Current numbers (synthetic: untrained 8-bit weights, random inputs)
+### Flow check on untrained weights (synthetic inputs)
 
 From `hls/results_synthetic/RESULTS.md`. These only show that the flow works and
 give the resource scale. They say nothing about physics.
@@ -90,11 +109,7 @@ give the resource scale. They say nothing about physics.
 | deepsets | 2,794 | 1.00 | 1 | 150 ns | 0.5k |
 | mlp | 13,770 | 1.00 | 1 | 146 ns | 0 (LUT) |
 
-**First reading:** all variants are estimated to fit within 1 µs, and the transformer
-students come in at roughly 300 to 500 ns. The bottleneck is resources, not latency. At RF=1 the
-pairwise stream (16×16 pairs) together with the attention einsums would need most of a
-VU13P, so a realistic deployment uses RF 2 to 4 and/or fewer bits. Accuracy numbers
-come from the Kaggle runs below.
+Trained-model numbers are in the headline table above and in [docs/RESULTS.md](docs/RESULTS.md).
 
 ## Kaggle
 

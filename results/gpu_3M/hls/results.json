@@ -1,0 +1,454 @@
+{
+ "teacher_acc_same_jets": 0.85135,
+ "device": {
+  "name": "xcvu13p-flga2577-2-e",
+  "DSP": 12288,
+  "LUT": 1728000,
+  "FF": 3456000,
+  "BRAM_18K": 5376
+ },
+ "clock_ns": 4.17,
+ "budget_ns": 1000.0,
+ "rows": [
+  {
+   "variant": "deepsets",
+   "params": 2794,
+   "n_jets": 20000,
+   "acc_torch_baked": 0.58235,
+   "acc_torch_qat": 0.58215,
+   "acc_hls": 0.58205,
+   "hls_vs_qat_argmax_agree": 0.99745,
+   "hls_vs_qat_max_abs_logit_diff": 0.04339599609375,
+   "teacher_agree_hls": 0.6147,
+   "trained_metrics": {
+    "float_val": {
+     "acc": 0.586492,
+     "loss": 1.2227340011901855,
+     "teacher_agreement": 0.620176
+    },
+    "float_test": {
+     "acc": 0.58538,
+     "loss": 1.221745051147461,
+     "teacher_agreement": 0.620804
+    },
+    "qat_val": {
+     "acc": 0.582768,
+     "loss": 1.2353716598205566,
+     "teacher_agreement": 0.615556
+    },
+    "qat_test": {
+     "acc": 0.582172,
+     "loss": 1.234592954345703,
+     "teacher_agreement": 0.616828
+    }
+   },
+   "sweep": [
+    {
+     "reuse_factor": 1,
+     "cycles": 36,
+     "latency_ns": 150.12,
+     "ii": 1,
+     "dsp": 512,
+     "lut_mult": 1426048,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.041666666666666664,
+     "lut_mult_frac": 0.8252592592592592,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 2,
+     "cycles": 63,
+     "latency_ns": 262.71,
+     "ii": 2,
+     "dsp": 256,
+     "lut_mult": 713024,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.020833333333333332,
+     "lut_mult_frac": 0.4126296296296296,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 4,
+     "cycles": 117,
+     "latency_ns": 487.89,
+     "ii": 4,
+     "dsp": 128,
+     "lut_mult": 356544,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.010416666666666666,
+     "lut_mult_frac": 0.20633333333333334,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 8,
+     "cycles": 225,
+     "latency_ns": 938.25,
+     "ii": 8,
+     "dsp": 64,
+     "lut_mult": 178304,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.005208333333333333,
+     "lut_mult_frac": 0.10318518518518519,
+     "csynth": null
+    }
+   ],
+   "sec": 33.01429867744446
+  },
+  {
+   "variant": "gds_l1_linear",
+   "params": 2430,
+   "n_jets": 20000,
+   "acc_torch_baked": 0.63835,
+   "acc_torch_qat": 0.63795,
+   "acc_hls": 0.63705,
+   "hls_vs_qat_argmax_agree": 0.98685,
+   "hls_vs_qat_max_abs_logit_diff": 0.5916748046875,
+   "teacher_agree_hls": 0.6755,
+   "trained_metrics": {
+    "float_val": {
+     "acc": 0.635116,
+     "loss": 1.0913594790802001,
+     "teacher_agreement": 0.673608
+    },
+    "float_test": {
+     "acc": 0.635536,
+     "loss": 1.090385993133545,
+     "teacher_agreement": 0.676096
+    },
+    "qat_val": {
+     "acc": 0.633752,
+     "loss": 1.0949534808044434,
+     "teacher_agreement": 0.672108
+    },
+    "qat_test": {
+     "acc": 0.633592,
+     "loss": 1.094117506713867,
+     "teacher_agreement": 0.674208
+    }
+   },
+   "sweep": [
+    {
+     "reuse_factor": 1,
+     "cycles": 73,
+     "latency_ns": 304.40999999999997,
+     "ii": 1,
+     "dsp": 6144,
+     "lut_mult": 2116416,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.5,
+     "lut_mult_frac": 1.2247777777777777,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 2,
+     "cycles": 110,
+     "latency_ns": 458.7,
+     "ii": 2,
+     "dsp": 3072,
+     "lut_mult": 1058240,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.25,
+     "lut_mult_frac": 0.6124074074074074,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 4,
+     "cycles": 192,
+     "latency_ns": 800.64,
+     "ii": 4,
+     "dsp": 1536,
+     "lut_mult": 529152,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.125,
+     "lut_mult_frac": 0.30622222222222223,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 8,
+     "cycles": 356,
+     "latency_ns": 1484.52,
+     "ii": 8,
+     "dsp": 768,
+     "lut_mult": 264576,
+     "clock_ns": 4.17,
+     "fits_budget": false,
+     "dsp_frac": 0.0625,
+     "lut_mult_frac": 0.15311111111111111,
+     "csynth": null
+    }
+   ],
+   "sec": 59.215437173843384
+  },
+  {
+   "variant": "gds_l1_nogate",
+   "params": 2280,
+   "n_jets": 20000,
+   "acc_torch_baked": 0.62535,
+   "acc_torch_qat": 0.62545,
+   "acc_hls": 0.6235,
+   "hls_vs_qat_argmax_agree": 0.96565,
+   "hls_vs_qat_max_abs_logit_diff": 2.3304290771484375,
+   "teacher_agree_hls": 0.6606,
+   "trained_metrics": {
+    "float_val": {
+     "acc": 0.628492,
+     "loss": 1.1140384246826172,
+     "teacher_agreement": 0.665892
+    },
+    "float_test": {
+     "acc": 0.627668,
+     "loss": 1.114356524597168,
+     "teacher_agreement": 0.667024
+    },
+    "qat_val": {
+     "acc": 0.62668,
+     "loss": 1.1170011900939942,
+     "teacher_agreement": 0.663468
+    },
+    "qat_test": {
+     "acc": 0.625428,
+     "loss": 1.1177218630828858,
+     "teacher_agreement": 0.664224
+    }
+   },
+   "sweep": [
+    {
+     "reuse_factor": 1,
+     "cycles": 80,
+     "latency_ns": 333.6,
+     "ii": 1,
+     "dsp": 8960,
+     "lut_mult": 2116288,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.7291666666666666,
+     "lut_mult_frac": 1.2247037037037036,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 2,
+     "cycles": 121,
+     "latency_ns": 504.57,
+     "ii": 2,
+     "dsp": 4480,
+     "lut_mult": 1058176,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.3645833333333333,
+     "lut_mult_frac": 0.6123703703703703,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 4,
+     "cycles": 203,
+     "latency_ns": 846.51,
+     "ii": 4,
+     "dsp": 2240,
+     "lut_mult": 529088,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.18229166666666666,
+     "lut_mult_frac": 0.30618518518518517,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 8,
+     "cycles": 367,
+     "latency_ns": 1530.3899999999999,
+     "ii": 8,
+     "dsp": 1120,
+     "lut_mult": 264576,
+     "clock_ns": 4.17,
+     "fits_budget": false,
+     "dsp_frac": 0.09114583333333333,
+     "lut_mult_frac": 0.15311111111111111,
+     "csynth": null
+    }
+   ],
+   "sec": 57.04359316825867
+  },
+  {
+   "variant": "gds_l1_softmax",
+   "params": 2440,
+   "n_jets": 20000,
+   "acc_torch_baked": 0.6268,
+   "acc_torch_qat": 0.62665,
+   "acc_hls": 0.62475,
+   "hls_vs_qat_argmax_agree": 0.9704,
+   "hls_vs_qat_max_abs_logit_diff": 1.1324920654296875,
+   "teacher_agree_hls": 0.6605,
+   "trained_metrics": {
+    "float_val": {
+     "acc": 0.625656,
+     "loss": 1.1151141309814454,
+     "teacher_agreement": 0.662492
+    },
+    "float_test": {
+     "acc": 0.62588,
+     "loss": 1.1147395333862304,
+     "teacher_agreement": 0.664532
+    },
+    "qat_val": {
+     "acc": 0.625636,
+     "loss": 1.1153210326538086,
+     "teacher_agreement": 0.662496
+    },
+    "qat_test": {
+     "acc": 0.625476,
+     "loss": 1.1150294418640136,
+     "teacher_agreement": 0.664164
+    }
+   },
+   "sweep": [
+    {
+     "reuse_factor": 1,
+     "cycles": 85,
+     "latency_ns": 354.45,
+     "ii": 1,
+     "dsp": 10496,
+     "lut_mult": 2264640,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.8541666666666666,
+     "lut_mult_frac": 1.3105555555555555,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 2,
+     "cycles": 122,
+     "latency_ns": 508.74,
+     "ii": 2,
+     "dsp": 5248,
+     "lut_mult": 1132352,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.4270833333333333,
+     "lut_mult_frac": 0.6552962962962963,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 4,
+     "cycles": 204,
+     "latency_ns": 850.68,
+     "ii": 4,
+     "dsp": 2624,
+     "lut_mult": 566208,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.21354166666666666,
+     "lut_mult_frac": 0.32766666666666666,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 8,
+     "cycles": 368,
+     "latency_ns": 1534.56,
+     "ii": 8,
+     "dsp": 1312,
+     "lut_mult": 283136,
+     "clock_ns": 4.17,
+     "fits_budget": false,
+     "dsp_frac": 0.10677083333333333,
+     "lut_mult_frac": 0.16385185185185186,
+     "csynth": null
+    }
+   ],
+   "sec": 46.050426721572876
+  },
+  {
+   "variant": "mlp",
+   "params": 13770,
+   "n_jets": 20000,
+   "acc_torch_baked": 0.58275,
+   "acc_torch_qat": 0.58235,
+   "acc_hls": 0.58225,
+   "hls_vs_qat_argmax_agree": 0.9973,
+   "hls_vs_qat_max_abs_logit_diff": 0.04150390625,
+   "teacher_agree_hls": 0.61535,
+   "trained_metrics": {
+    "float_val": {
+     "acc": 0.587652,
+     "loss": 1.211961263305664,
+     "teacher_agreement": 0.619904
+    },
+    "float_test": {
+     "acc": 0.587428,
+     "loss": 1.2127468633270264,
+     "teacher_agreement": 0.621656
+    },
+    "qat_val": {
+     "acc": 0.57942,
+     "loss": 1.2332286145629883,
+     "teacher_agreement": 0.611352
+    },
+    "qat_test": {
+     "acc": 0.580072,
+     "loss": 1.2318542755126953,
+     "teacher_agreement": 0.613864
+    }
+   },
+   "sweep": [
+    {
+     "reuse_factor": 1,
+     "cycles": 35,
+     "latency_ns": 145.95,
+     "ii": 1,
+     "dsp": 0,
+     "lut_mult": 783616,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.0,
+     "lut_mult_frac": 0.4534814814814815,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 2,
+     "cycles": 67,
+     "latency_ns": 279.39,
+     "ii": 2,
+     "dsp": 0,
+     "lut_mult": 391936,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.0,
+     "lut_mult_frac": 0.2268148148148148,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 4,
+     "cycles": 131,
+     "latency_ns": 546.27,
+     "ii": 4,
+     "dsp": 0,
+     "lut_mult": 196032,
+     "clock_ns": 4.17,
+     "fits_budget": true,
+     "dsp_frac": 0.0,
+     "lut_mult_frac": 0.11344444444444444,
+     "csynth": null
+    },
+    {
+     "reuse_factor": 8,
+     "cycles": 259,
+     "latency_ns": 1080.03,
+     "ii": 8,
+     "dsp": 0,
+     "lut_mult": 98048,
+     "clock_ns": 4.17,
+     "fits_budget": false,
+     "dsp_frac": 0.0,
+     "lut_mult_frac": 0.05674074074074074,
+     "csynth": null
+    }
+   ],
+   "sec": 15.267192125320435
+  }
+ ]
+}

@@ -9,3 +9,5 @@ outputs/
 *.so
 .pytest_cache/
 hls/results*/prj/
+kout/
+_cache/

@@ -1,0 +1,924 @@
++ /usr/bin/python3 -m pip install -q uproot awkward
++ nvidia-smi || true
+Fri Nov 20 23:17:17 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.178.04             Driver Version: 580.178.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla T4                       Off |   00000000:00:04.0 Off |                    0 |
+| N/A   33C    P8              9W /   70W |       0MiB /  15360MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  Tesla T4                       Off |   00000000:00:05.0 Off |                    0 |
+| N/A   35C    P8              9W /   70W |       0MiB /  15360MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+train_dir /kaggle/input/datasets/suryatrainer/jetclass-train-part0/train_data 
+val_dir /kaggle/input/datasets/suryatrainer/jetclass-val/val_data 
+teacher /kaggle/input/datasets/avinashchandragupta/gds-part-teacher/teacher_v2_shared_10M_10ep.pt
+23:17:32 device cuda  args {'synthetic': False, 'train_dir': '/kaggle/input/datasets/suryatrainer/jetclass-train-part0/train_data', 'val_dir': '/kaggle/input/datasets/suryatrainer/jetclass-val/val_data', 'teacher': '/kaggle/input/datasets/avinashchandragupta/gds-part-teacher/teacher_v2_shared_10M_10ep.pt', 'cache_dir': '/kaggle/working/_cache', 'jets_per_class': 300000, 'val_jets_per_class': 50000, 'test_frac': 0.5, 'variants': 'gds_l1_softmax,gds_l1_linear,gds_l1_nogate,deepsets,mlp', 'n_particles': 16, 'epochs': 20, 'qat_epochs': 6, 'max_steps': None, 'batch_size': 1024, 'lr': 0.003, 'alpha': 0.3, 'T': 4.0, 'w_bits': 8, 'w_int': 2, 'b_bits': 16, 'b_int': 6, 'a_bits': 16, 'a_int': 6, 'seed': 0, 'out': '/kaggle/working/outputs'}
+[cache] /kaggle/input/datasets/suryatrainer/jetclass-train-part0/train_data -> /kaggle/working/_cache/train: 3,000,000 jets from 30 files
+  [QCD] ZJetsToNuNu_000.root: 100,000 jets
+  [QCD] ZJetsToNuNu_001.root: 100,000 jets
+  [QCD] ZJetsToNuNu_002.root: 100,000 jets
+  [Hbb] HToBB_000.root: 100,000 jets
+  [Hbb] HToBB_001.root: 100,000 jets
+  [Hbb] HToBB_002.root: 100,000 jets
+  [Hcc] HToCC_000.root: 100,000 jets
+  [Hcc] HToCC_001.root: 100,000 jets
+  [Hcc] HToCC_002.root: 100,000 jets
+  [Hgg] HToGG_000.root: 100,000 jets
+  [Hgg] HToGG_001.root: 100,000 jets
+  [Hgg] HToGG_002.root: 100,000 jets
+  [H4q] HToWW4Q_000.root: 100,000 jets
+  [H4q] HToWW4Q_001.root: 100,000 jets
+  [H4q] HToWW4Q_002.root: 100,000 jets
+  [Hqql] HToWW2Q1L_000.root: 100,000 jets
+  [Hqql] HToWW2Q1L_001.root: 100,000 jets
+  [Hqql] HToWW2Q1L_002.root: 100,000 jets
+  [Zqq] ZToQQ_000.root: 100,000 jets
+  [Zqq] ZToQQ_001.root: 100,000 jets
+  [Zqq] ZToQQ_002.root: 100,000 jets
+  [Wqq] WToQQ_000.root: 100,000 jets
+  [Wqq] WToQQ_001.root: 100,000 jets
+  [Wqq] WToQQ_002.root: 100,000 jets
+  [Tbqq] TTBar_000.root: 100,000 jets
+  [Tbqq] TTBar_001.root: 100,000 jets
+  [Tbqq] TTBar_002.root: 100,000 jets
+  [Tbl] TTBarLep_000.root: 100,000 jets
+  [Tbl] TTBarLep_001.root: 100,000 jets
+  [Tbl] TTBarLep_002.root: 100,000 jets
+23:21:36   extract /kaggle/working/_cache/train: batch 0/11719 (6s)
+23:21:47   extract /kaggle/working/_cache/train: batch 200/11719 (17s)
+23:21:58   extract /kaggle/working/_cache/train: batch 400/11719 (28s)
+23:22:09   extract /kaggle/working/_cache/train: batch 600/11719 (39s)
+23:22:20   extract /kaggle/working/_cache/train: batch 800/11719 (50s)
+23:22:32   extract /kaggle/working/_cache/train: batch 1000/11719 (62s)
+23:22:43   extract /kaggle/working/_cache/train: batch 1200/11719 (73s)
+23:22:52   extract /kaggle/working/_cache/train: batch 1400/11719 (82s)
+23:23:02   extract /kaggle/working/_cache/train: batch 1600/11719 (92s)
+23:23:11   extract /kaggle/working/_cache/train: batch 1800/11719 (101s)
+23:23:21   extract /kaggle/working/_cache/train: batch 2000/11719 (111s)
+23:23:31   extract /kaggle/working/_cache/train: batch 2200/11719 (121s)
+23:23:41   extract /kaggle/working/_cache/train: batch 2400/11719 (131s)
+23:23:50   extract /kaggle/working/_cache/train: batch 2600/11719 (140s)
+23:23:59   extract /kaggle/working/_cache/train: batch 2800/11719 (149s)
+23:24:08   extract /kaggle/working/_cache/train: batch 3000/11719 (158s)
+23:24:18   extract /kaggle/working/_cache/train: batch 3200/11719 (168s)
+23:24:27   extract /kaggle/working/_cache/train: batch 3400/11719 (177s)
+23:24:37   extract /kaggle/working/_cache/train: batch 3600/11719 (187s)
+23:24:49   extract /kaggle/working/_cache/train: batch 3800/11719 (199s)
+23:25:01   extract /kaggle/working/_cache/train: batch 4000/11719 (211s)
+23:25:13   extract /kaggle/working/_cache/train: batch 4200/11719 (223s)
+23:25:25   extract /kaggle/working/_cache/train: batch 4400/11719 (235s)
+23:25:37   extract /kaggle/working/_cache/train: batch 4600/11719 (247s)
+23:25:48   extract /kaggle/working/_cache/train: batch 4800/11719 (258s)
+23:25:59   extract /kaggle/working/_cache/train: batch 5000/11719 (269s)
+23:26:09   extract /kaggle/working/_cache/train: batch 5200/11719 (279s)
+23:26:19   extract /kaggle/working/_cache/train: batch 5400/11719 (289s)
+23:26:29   extract /kaggle/working/_cache/train: batch 5600/11719 (299s)
+23:26:40   extract /kaggle/working/_cache/train: batch 5800/11719 (310s)
+23:26:48   extract /kaggle/working/_cache/train: batch 6000/11719 (318s)
+23:26:55   extract /kaggle/working/_cache/train: batch 6200/11719 (325s)
+23:27:02   extract /kaggle/working/_cache/train: batch 6400/11719 (332s)
+23:27:10   extract /kaggle/working/_cache/train: batch 6600/11719 (340s)
+23:27:17   extract /kaggle/working/_cache/train: batch 6800/11719 (347s)
+23:27:24   extract /kaggle/working/_cache/train: batch 7000/11719 (354s)
+23:27:32   extract /kaggle/working/_cache/train: batch 7200/11719 (362s)
+23:27:41   extract /kaggle/working/_cache/train: batch 7400/11719 (371s)
+23:27:49   extract /kaggle/working/_cache/train: batch 7600/11719 (379s)
+23:27:57   extract /kaggle/working/_cache/train: batch 7800/11719 (387s)
+23:28:06   extract /kaggle/working/_cache/train: batch 8000/11719 (396s)
+23:28:14   extract /kaggle/working/_cache/train: batch 8200/11719 (404s)
+23:28:22   extract /kaggle/working/_cache/train: batch 8400/11719 (412s)
+23:28:30   extract /kaggle/working/_cache/train: batch 8600/11719 (420s)
+23:28:38   extract /kaggle/working/_cache/train: batch 8800/11719 (428s)
+23:28:46   extract /kaggle/working/_cache/train: batch 9000/11719 (436s)
+23:28:54   extract /kaggle/working/_cache/train: batch 9200/11719 (444s)
+23:29:02   extract /kaggle/working/_cache/train: batch 9400/11719 (452s)
+23:29:14   extract /kaggle/working/_cache/train: batch 9600/11719 (464s)
+23:29:25   extract /kaggle/working/_cache/train: batch 9800/11719 (475s)
+23:29:37   extract /kaggle/working/_cache/train: batch 10000/11719 (487s)
+23:29:48   extract /kaggle/working/_cache/train: batch 10200/11719 (498s)
+23:30:00   extract /kaggle/working/_cache/train: batch 10400/11719 (510s)
+23:30:10   extract /kaggle/working/_cache/train: batch 10600/11719 (520s)
+23:30:19   extract /kaggle/working/_cache/train: batch 10800/11719 (529s)
+23:30:27   extract /kaggle/working/_cache/train: batch 11000/11719 (537s)
+23:30:35   extract /kaggle/working/_cache/train: batch 11200/11719 (545s)
+23:30:44   extract /kaggle/working/_cache/train: batch 11400/11719 (554s)
+23:30:52   extract /kaggle/working/_cache/train: batch 11600/11719 (562s)
+23:30:58 train: 3,000,000 jets
+[cache] /kaggle/input/datasets/suryatrainer/jetclass-val/val_data -> /kaggle/working/_cache/val: 500,000 jets from 10 files
+  [QCD] ZJetsToNuNu_120.root: 50,000 jets
+  [Hbb] HToBB_120.root: 50,000 jets
+  [Hcc] HToCC_120.root: 50,000 jets
+  [Hgg] HToGG_120.root: 50,000 jets
+  [H4q] HToWW4Q_120.root: 50,000 jets
+  [Hqql] HToWW2Q1L_120.root: 50,000 jets
+  [Zqq] ZToQQ_120.root: 50,000 jets
+  [Wqq] WToQQ_120.root: 50,000 jets
+  [Tbqq] TTBar_120.root: 50,000 jets
+  [Tbl] TTBarLep_120.root: 50,000 jets
+23:31:23   extract /kaggle/working/_cache/val: batch 0/1954 (0s)
+23:31:35   extract /kaggle/working/_cache/val: batch 200/1954 (12s)
+23:31:45   extract /kaggle/working/_cache/val: batch 400/1954 (22s)
+23:31:55   extract /kaggle/working/_cache/val: batch 600/1954 (31s)
+23:32:07   extract /kaggle/working/_cache/val: batch 800/1954 (43s)
+23:32:17   extract /kaggle/working/_cache/val: batch 1000/1954 (53s)
+23:32:24   extract /kaggle/working/_cache/val: batch 1200/1954 (61s)
+23:32:32   extract /kaggle/working/_cache/val: batch 1400/1954 (69s)
+23:32:41   extract /kaggle/working/_cache/val: batch 1600/1954 (77s)
+23:32:51   extract /kaggle/working/_cache/val: batch 1800/1954 (88s)
+23:32:58 val: 500,000 jets
+23:32:58 teacher accuracy (full jet, 128 particles): {'val': 0.848892, 'test': 0.848296}
+23:32:59 === gds_l1_softmax
+23:32:59   params: 2,440
+23:33:31   [float] epoch 1/20 loss 1.1356 val acc 0.5305 agree 0.5549
+23:34:00   [float] epoch 2/20 loss 0.8080 val acc 0.5659 agree 0.5938
+23:34:27   [float] epoch 3/20 loss 0.7446 val acc 0.5883 agree 0.6206
+23:34:55   [float] epoch 4/20 loss 0.7110 val acc 0.6032 agree 0.6375
+23:35:23   [float] epoch 5/20 loss 0.6955 val acc 0.6072 agree 0.6403
+23:35:51   [float] epoch 6/20 loss 0.6857 val acc 0.6147 agree 0.6496
+23:36:19   [float] epoch 7/20 loss 0.6784 val acc 0.6144 agree 0.6495
+23:36:46   [float] epoch 8/20 loss 0.6735 val acc 0.6193 agree 0.6554
+23:37:15   [float] epoch 9/20 loss 0.6695 val acc 0.6180 agree 0.6539
+23:37:44   [float] epoch 10/20 loss 0.6662 val acc 0.6221 agree 0.6580
+23:38:13   [float] epoch 11/20 loss 0.6633 val acc 0.6206 agree 0.6564
+23:38:41   [float] epoch 12/20 loss 0.6609 val acc 0.6230 agree 0.6598
+23:39:10   [float] epoch 13/20 loss 0.6588 val acc 0.6226 agree 0.6586
+23:39:38   [float] epoch 14/20 loss 0.6569 val acc 0.6232 agree 0.6597
+23:40:07   [float] epoch 15/20 loss 0.6551 val acc 0.6237 agree 0.6599
+23:40:35   [float] epoch 16/20 loss 0.6538 val acc 0.6244 agree 0.6614
+23:41:04   [float] epoch 17/20 loss 0.6528 val acc 0.6245 agree 0.6611
+23:41:33   [float] epoch 18/20 loss 0.6520 val acc 0.6254 agree 0.6625
+23:42:01   [float] epoch 19/20 loss 0.6515 val acc 0.6254 agree 0.6623
+23:42:30   [float] epoch 20/20 loss 0.6512 val acc 0.6257 agree 0.6625
+23:43:40   [qat] epoch 1/6 loss 0.6644 val acc 0.6236 agree 0.6593
+23:44:50   [qat] epoch 2/6 loss 0.6607 val acc 0.6239 agree 0.6605
+23:45:59   [qat] epoch 3/6 loss 0.6586 val acc 0.6233 agree 0.6594
+23:47:07   [qat] epoch 4/6 loss 0.6576 val acc 0.6243 agree 0.6609
+23:48:16   [qat] epoch 5/6 loss 0.6564 val acc 0.6229 agree 0.6592
+23:49:26   [qat] epoch 6/6 loss 0.6545 val acc 0.6256 agree 0.6625
+23:49:27 === gds_l1_linear
+23:49:27   params: 2,430
+23:49:54   [float] epoch 1/20 loss 1.1252 val acc 0.4934 agree 0.5139
+23:50:21   [float] epoch 2/20 loss 0.8017 val acc 0.5849 agree 0.6172
+23:50:48   [float] epoch 3/20 loss 0.7230 val acc 0.6054 agree 0.6389
+23:51:14   [float] epoch 4/20 loss 0.6922 val acc 0.6158 agree 0.6525
+23:51:41   [float] epoch 5/20 loss 0.6768 val acc 0.6205 agree 0.6568
+23:52:08   [float] epoch 6/20 loss 0.6662 val acc 0.6203 agree 0.6566
+23:52:35   [float] epoch 7/20 loss 0.6590 val acc 0.6250 agree 0.6623
+23:53:02   [float] epoch 8/20 loss 0.6538 val acc 0.6262 agree 0.6625
+23:53:28   [float] epoch 9/20 loss 0.6498 val acc 0.6227 agree 0.6595
+23:53:55   [float] epoch 10/20 loss 0.6467 val acc 0.6297 agree 0.6678
+23:54:21   [float] epoch 11/20 loss 0.6439 val acc 0.6287 agree 0.6660
+23:54:48   [float] epoch 12/20 loss 0.6414 val acc 0.6331 agree 0.6714
+23:55:15   [float] epoch 13/20 loss 0.6395 val acc 0.6316 agree 0.6687
+23:55:41   [float] epoch 14/20 loss 0.6376 val acc 0.6331 agree 0.6710
+23:56:07   [float] epoch 15/20 loss 0.6363 val acc 0.6311 agree 0.6693
+23:56:34   [float] epoch 16/20 loss 0.6350 val acc 0.6346 agree 0.6727
+23:57:01   [float] epoch 17/20 loss 0.6340 val acc 0.6348 agree 0.6729
+23:57:27   [float] epoch 18/20 loss 0.6332 val acc 0.6351 agree 0.6736
+23:57:53   [float] epoch 19/20 loss 0.6327 val acc 0.6350 agree 0.6737
+23:58:20   [float] epoch 20/20 loss 0.6324 val acc 0.6348 agree 0.6736
+23:59:23   [qat] epoch 1/6 loss 0.6498 val acc 0.6297 agree 0.6676
+00:00:24   [qat] epoch 2/6 loss 0.6503 val acc 0.6206 agree 0.6558
+00:01:26   [qat] epoch 3/6 loss 0.6470 val acc 0.6314 agree 0.6699
+00:02:29   [qat] epoch 4/6 loss 0.6418 val acc 0.6325 agree 0.6697
+00:03:32   [qat] epoch 5/6 loss 0.6389 val acc 0.6324 agree 0.6709
+00:04:37   [qat] epoch 6/6 loss 0.6376 val acc 0.6338 agree 0.6721
+00:04:38 === gds_l1_nogate
+00:04:38   params: 2,280
+00:05:02   [float] epoch 1/20 loss 1.1435 val acc 0.5322 agree 0.5570
+00:05:27   [float] epoch 2/20 loss 0.7916 val acc 0.5790 agree 0.6084
+00:05:51   [float] epoch 3/20 loss 0.7336 val acc 0.6022 agree 0.6358
+00:06:15   [float] epoch 4/20 loss 0.7078 val acc 0.6106 agree 0.6448
+00:06:39   [float] epoch 5/20 loss 0.6934 val acc 0.6139 agree 0.6485
+00:07:03   [float] epoch 6/20 loss 0.6831 val acc 0.6185 agree 0.6533
+00:07:27   [float] epoch 7/20 loss 0.6767 val acc 0.6192 agree 0.6549
+00:07:51   [float] epoch 8/20 loss 0.6717 val acc 0.6183 agree 0.6545
+00:08:15   [float] epoch 9/20 loss 0.6674 val acc 0.6236 agree 0.6601
+00:08:38   [float] epoch 10/20 loss 0.6644 val acc 0.6246 agree 0.6613
+00:09:01   [float] epoch 11/20 loss 0.6619 val acc 0.6231 agree 0.6594
+00:09:25   [float] epoch 12/20 loss 0.6598 val acc 0.6254 agree 0.6622
+00:09:48   [float] epoch 13/20 loss 0.6578 val acc 0.6261 agree 0.6633
+00:10:11   [float] epoch 14/20 loss 0.6562 val acc 0.6240 agree 0.6612
+00:10:35   [float] epoch 15/20 loss 0.6547 val acc 0.6265 agree 0.6634
+00:10:58   [float] epoch 16/20 loss 0.6534 val acc 0.6279 agree 0.6658
+00:11:21   [float] epoch 17/20 loss 0.6524 val acc 0.6283 agree 0.6658
+00:11:45   [float] epoch 18/20 loss 0.6516 val acc 0.6285 agree 0.6659
+00:12:08   [float] epoch 19/20 loss 0.6511 val acc 0.6283 agree 0.6659
+00:12:31   [float] epoch 20/20 loss 0.6508 val acc 0.6280 agree 0.6656
+00:13:25   [qat] epoch 1/6 loss 0.6749 val acc 0.6210 agree 0.6567
+00:14:19   [qat] epoch 2/6 loss 0.6709 val acc 0.6203 agree 0.6560
+00:15:13   [qat] epoch 3/6 loss 0.6698 val acc 0.6214 agree 0.6564
+00:16:06   [qat] epoch 4/6 loss 0.6703 val acc 0.6108 agree 0.6433
+00:17:00   [qat] epoch 5/6 loss 0.6699 val acc 0.6145 agree 0.6480
+00:17:55   [qat] epoch 6/6 loss 0.6657 val acc 0.6267 agree 0.6635
+00:17:56 === deepsets
+00:17:56   params: 2,794
+00:18:07   [float] epoch 1/20 loss 1.2764 val acc 0.4133 agree 0.4294
+00:18:19   [float] epoch 2/20 loss 0.9299 val acc 0.5333 agree 0.5593
+00:18:30   [float] epoch 3/20 loss 0.8145 val acc 0.5521 agree 0.5813
+00:18:42   [float] epoch 4/20 loss 0.7917 val acc 0.5597 agree 0.5894
+00:18:53   [float] epoch 5/20 loss 0.7784 val acc 0.5678 agree 0.5989
+00:19:04   [float] epoch 6/20 loss 0.7672 val acc 0.5728 agree 0.6050
+00:19:15   [float] epoch 7/20 loss 0.7580 val acc 0.5772 agree 0.6099
+00:19:26   [float] epoch 8/20 loss 0.7535 val acc 0.5805 agree 0.6139
+00:19:37   [float] epoch 9/20 loss 0.7506 val acc 0.5830 agree 0.6166
+00:19:48   [float] epoch 10/20 loss 0.7482 val acc 0.5818 agree 0.6152
+00:19:59   [float] epoch 11/20 loss 0.7463 val acc 0.5834 agree 0.6166
+00:20:10   [float] epoch 12/20 loss 0.7446 val acc 0.5846 agree 0.6180
+00:20:22   [float] epoch 13/20 loss 0.7434 val acc 0.5846 agree 0.6181
+00:20:33   [float] epoch 14/20 loss 0.7423 val acc 0.5852 agree 0.6190
+00:20:45   [float] epoch 15/20 loss 0.7413 val acc 0.5852 agree 0.6186
+00:20:56   [float] epoch 16/20 loss 0.7405 val acc 0.5862 agree 0.6198
+00:21:07   [float] epoch 17/20 loss 0.7399 val acc 0.5862 agree 0.6196
+00:21:19   [float] epoch 18/20 loss 0.7393 val acc 0.5865 agree 0.6202
+00:21:30   [float] epoch 19/20 loss 0.7389 val acc 0.5863 agree 0.6199
+00:21:42   [float] epoch 20/20 loss 0.7387 val acc 0.5864 agree 0.6201
+00:22:02   [qat] epoch 1/6 loss 0.8362 val acc 0.5750 agree 0.6070
+00:22:22   [qat] epoch 2/6 loss 0.7607 val acc 0.5808 agree 0.6130
+00:22:40   [qat] epoch 3/6 loss 0.7553 val acc 0.5825 agree 0.6150
+00:22:59   [qat] epoch 4/6 loss 0.7532 val acc 0.5810 agree 0.6139
+00:23:18   [qat] epoch 5/6 loss 0.7520 val acc 0.5820 agree 0.6148
+00:23:37   [qat] epoch 6/6 loss 0.7509 val acc 0.5828 agree 0.6156
+00:23:38 === mlp
+00:23:38   params: 13,770
+00:23:49   [float] epoch 1/20 loss 1.2001 val acc 0.4148 agree 0.4298
+00:23:59   [float] epoch 2/20 loss 0.9515 val acc 0.5065 agree 0.5299
+00:24:10   [float] epoch 3/20 loss 0.8502 val acc 0.5332 agree 0.5596
+00:24:21   [float] epoch 4/20 loss 0.8055 val acc 0.5553 agree 0.5827
+00:24:31   [float] epoch 5/20 loss 0.7819 val acc 0.5547 agree 0.5833
+00:24:42   [float] epoch 6/20 loss 0.7701 val acc 0.5659 agree 0.5964
+00:24:52   [float] epoch 7/20 loss 0.7612 val acc 0.5696 agree 0.6000
+00:25:03   [float] epoch 8/20 loss 0.7544 val acc 0.5750 agree 0.6058
+00:25:13   [float] epoch 9/20 loss 0.7488 val acc 0.5754 agree 0.6058
+00:25:24   [float] epoch 10/20 loss 0.7441 val acc 0.5778 agree 0.6086
+00:25:34   [float] epoch 11/20 loss 0.7399 val acc 0.5796 agree 0.6097
+00:25:45   [float] epoch 12/20 loss 0.7363 val acc 0.5793 agree 0.6103
+00:25:56   [float] epoch 13/20 loss 0.7329 val acc 0.5825 agree 0.6133
+00:26:06   [float] epoch 14/20 loss 0.7300 val acc 0.5837 agree 0.6158
+00:26:17   [float] epoch 15/20 loss 0.7274 val acc 0.5844 agree 0.6156
+00:26:27   [float] epoch 16/20 loss 0.7252 val acc 0.5865 agree 0.6187
+00:26:38   [float] epoch 17/20 loss 0.7232 val acc 0.5871 agree 0.6190
+00:26:48   [float] epoch 18/20 loss 0.7217 val acc 0.5876 agree 0.6199
+00:26:59   [float] epoch 19/20 loss 0.7207 val acc 0.5877 agree 0.6199
+00:27:09   [float] epoch 20/20 loss 0.7201 val acc 0.5876 agree 0.6199
+00:27:26   [qat] epoch 1/6 loss 0.8039 val acc 0.5677 agree 0.5976
+00:27:42   [qat] epoch 2/6 loss 0.7540 val acc 0.5732 agree 0.6038
+00:27:59   [qat] epoch 3/6 loss 0.7482 val acc 0.5739 agree 0.6047
+00:28:16   [qat] epoch 4/6 loss 0.7441 val acc 0.5776 agree 0.6095
+00:28:34   [qat] epoch 5/6 loss 0.7403 val acc 0.5774 agree 0.6088
+00:28:51   [qat] epoch 6/6 loss 0.7370 val acc 0.5794 agree 0.6114
+00:28:51 DONE
++ /usr/bin/python3 -m pip install -q hls4ml==1.3.0 "quantizers<2"
+Interpreting Model ...
+Topology:
+Layer name: phi1, layer type: Dense, input shape: [[None, 16, 10]]
+Layer name: phi1_act, layer type: Activation, input shape: [[None, 16, 32]]
+Layer name: phi2, layer type: Dense, input shape: [[None, 16, 32]]
+Layer name: phi2_act, layer type: Activation, input shape: [[None, 16, 32]]
+Layer name: einsum, layer type: Einsum, input shape: [[None, 16, 32], [None, 16]]
+Layer name: rho1, layer type: Dense, input shape: [[None, 32]]
+Layer name: rho1_act, layer type: Activation, input shape: [[None, 32]]
+Layer name: rho2, layer type: Dense, input shape: [[None, 32]]
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1795220959.095743       7 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+Interpreting Model ...
+Topology:
+Layer name: phi1, layer type: Dense, input shape: [[None, 16, 10]]
+Layer name: phi1_act, layer type: Activation, input shape: [[None, 16, 32]]
+Layer name: phi2, layer type: Dense, input shape: [[None, 16, 32]]
+Layer name: phi2_act, layer type: Activation, input shape: [[None, 16, 32]]
+Layer name: einsum, layer type: Einsum, input shape: [[None, 16, 32], [None, 16]]
+Layer name: rho1, layer type: Dense, input shape: [[None, 32]]
+Layer name: rho1_act, layer type: Activation, input shape: [[None, 32]]
+Layer name: rho2, layer type: Dense, input shape: [[None, 32]]
+Interpreting Model ...
+Topology:
+Layer name: phi1, layer type: Dense, input shape: [[None, 16, 10]]
+Layer name: phi1_act, layer type: Activation, input shape: [[None, 16, 32]]
+Layer name: phi2, layer type: Dense, input shape: [[None, 16, 32]]
+Layer name: phi2_act, layer type: Activation, input shape: [[None, 16, 32]]
+Layer name: einsum, layer type: Einsum, input shape: [[None, 16, 32], [None, 16]]
+Layer name: rho1, layer type: Dense, input shape: [[None, 32]]
+Layer name: rho1_act, layer type: Activation, input shape: [[None, 32]]
+Layer name: rho2, layer type: Dense, input shape: [[None, 32]]
+Interpreting Model ...
+Topology:
+Layer name: phi1, layer type: Dense, input shape: [[None, 16, 10]]
+Layer name: phi1_act, layer type: Activation, input shape: [[None, 16, 32]]
+Layer name: phi2, layer type: Dense, input shape: [[None, 16, 32]]
+Layer name: phi2_act, layer type: Activation, input shape: [[None, 16, 32]]
+Layer name: einsum, layer type: Einsum, input shape: [[None, 16, 32], [None, 16]]
+Layer name: rho1, layer type: Dense, input shape: [[None, 32]]
+Layer name: rho1_act, layer type: Activation, input shape: [[None, 32]]
+Layer name: rho2, layer type: Dense, input shape: [[None, 32]]
+{"variant": "deepsets", "params": 2794, "n_jets": 20000, "acc_torch_baked": 0.62615, "acc_torch_qat": 0.62605, "acc_hls": 0.626, "hls_vs_qat_argmax_agree": 0.99795, "hls_vs_qat_max_abs_logit_diff": 0.0362091064453125, "teacher_agree_hls": 0.6962, "sec": 62.46630001068115}
+Interpreting Model ...
+Topology:
+Layer name: embed, layer type: Dense, input shape: [[None, 16, 10]]
+Layer name: embed_act, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: pair, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: pair_act, layer type: Activation, input shape: [[None, 16, 16, 4]]
+Layer name: einsum, layer type: Einsum, input shape: [[None, 16, 16, 4], [None, 16]]
+Layer name: q_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: gq_0, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gq_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: gk_0, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gk_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_1, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: q_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: k_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: einsum_1, layer type: Einsum, input shape: [[None, 16, 8], [None, 16]]
+Layer name: einsum_2, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: einsum_3, layer type: Einsum, input shape: [[None, 16, 8], [None, 8, 8]]
+Layer name: q_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: gq_1, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gq_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_2, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: gk_1, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gk_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_3, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: q_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: k_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: einsum_4, layer type: Einsum, input shape: [[None, 16, 8], [None, 16]]
+Layer name: einsum_5, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: einsum_6, layer type: Einsum, input shape: [[None, 16, 8], [None, 8, 8]]
+Layer name: out_0, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: out_1, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: add, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_1, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: ff1_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: ff_act_0, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: ff2_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: add_2, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: einsum_7, layer type: Einsum, input shape: [[None, 16, 16], [None, 16]]
+Layer name: head1, layer type: Dense, input shape: [[None, 16]]
+Layer name: head_act, layer type: Activation, input shape: [[None, 16]]
+Layer name: head2, layer type: Dense, input shape: [[None, 16]]
+Interpreting Model ...
+Topology:
+Layer name: embed, layer type: Dense, input shape: [[None, 16, 10]]
+Layer name: embed_act, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: pair, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: pair_act, layer type: Activation, input shape: [[None, 16, 16, 4]]
+Layer name: einsum, layer type: Einsum, input shape: [[None, 16, 16, 4], [None, 16]]
+Layer name: q_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: gq_0, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gq_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: gk_0, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gk_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_1, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: q_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: k_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: einsum_1, layer type: Einsum, input shape: [[None, 16, 8], [None, 16]]
+Layer name: einsum_2, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: einsum_3, layer type: Einsum, input shape: [[None, 16, 8], [None, 8, 8]]
+Layer name: q_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: gq_1, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gq_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_2, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: gk_1, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gk_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_3, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: q_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: k_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: einsum_4, layer type: Einsum, input shape: [[None, 16, 8], [None, 16]]
+Layer name: einsum_5, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: einsum_6, layer type: Einsum, input shape: [[None, 16, 8], [None, 8, 8]]
+Layer name: out_0, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: out_1, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: add, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_1, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: ff1_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: ff_act_0, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: ff2_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: add_2, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: einsum_7, layer type: Einsum, input shape: [[None, 16, 16], [None, 16]]
+Layer name: head1, layer type: Dense, input shape: [[None, 16]]
+Layer name: head_act, layer type: Activation, input shape: [[None, 16]]
+Layer name: head2, layer type: Dense, input shape: [[None, 16]]
+Interpreting Model ...
+Topology:
+Layer name: embed, layer type: Dense, input shape: [[None, 16, 10]]
+Layer name: embed_act, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: pair, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: pair_act, layer type: Activation, input shape: [[None, 16, 16, 4]]
+Layer name: einsum, layer type: Einsum, input shape: [[None, 16, 16, 4], [None, 16]]
+Layer name: q_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: gq_0, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gq_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: gk_0, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gk_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_1, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: q_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: k_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: einsum_1, layer type: Einsum, input shape: [[None, 16, 8], [None, 16]]
+Layer name: einsum_2, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: einsum_3, layer type: Einsum, input shape: [[None, 16, 8], [None, 8, 8]]
+Layer name: q_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: gq_1, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gq_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_2, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: gk_1, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gk_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_3, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: q_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: k_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: einsum_4, layer type: Einsum, input shape: [[None, 16, 8], [None, 16]]
+Layer name: einsum_5, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: einsum_6, layer type: Einsum, input shape: [[None, 16, 8], [None, 8, 8]]
+Layer name: out_0, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: out_1, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: add, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_1, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: ff1_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: ff_act_0, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: ff2_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: add_2, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: einsum_7, layer type: Einsum, input shape: [[None, 16, 16], [None, 16]]
+Layer name: head1, layer type: Dense, input shape: [[None, 16]]
+Layer name: head_act, layer type: Activation, input shape: [[None, 16]]
+Layer name: head2, layer type: Dense, input shape: [[None, 16]]
+Interpreting Model ...
+Topology:
+Layer name: embed, layer type: Dense, input shape: [[None, 16, 10]]
+Layer name: embed_act, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: pair, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: pair_act, layer type: Activation, input shape: [[None, 16, 16, 4]]
+Layer name: einsum, layer type: Einsum, input shape: [[None, 16, 16, 4], [None, 16]]
+Layer name: q_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: gq_0, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gq_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: gk_0, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gk_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_1, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: q_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: k_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: einsum_1, layer type: Einsum, input shape: [[None, 16, 8], [None, 16]]
+Layer name: einsum_2, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: einsum_3, layer type: Einsum, input shape: [[None, 16, 8], [None, 8, 8]]
+Layer name: q_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: gq_1, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gq_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_2, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: gk_1, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gk_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_3, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: q_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: k_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: einsum_4, layer type: Einsum, input shape: [[None, 16, 8], [None, 16]]
+Layer name: einsum_5, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: einsum_6, layer type: Einsum, input shape: [[None, 16, 8], [None, 8, 8]]
+Layer name: out_0, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: out_1, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: add, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_1, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: ff1_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: ff_act_0, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: ff2_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: add_2, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: einsum_7, layer type: Einsum, input shape: [[None, 16, 16], [None, 16]]
+Layer name: head1, layer type: Dense, input shape: [[None, 16]]
+Layer name: head_act, layer type: Activation, input shape: [[None, 16]]
+Layer name: head2, layer type: Dense, input shape: [[None, 16]]
+{"variant": "gds_l1_linear", "params": 2430, "n_jets": 20000, "acc_torch_baked": 0.6352, "acc_torch_qat": 0.63505, "acc_hls": 0.6388, "hls_vs_qat_argmax_agree": 0.98925, "hls_vs_qat_max_abs_logit_diff": 0.657806396484375, "teacher_agree_hls": 0.7234, "sec": 56.72210955619812}
+Interpreting Model ...
+Topology:
+Layer name: embed, layer type: Dense, input shape: [[None, 16, 10]]
+Layer name: embed_act, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: pair, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: pair_act, layer type: Activation, input shape: [[None, 16, 16, 4]]
+Layer name: q_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: einsum, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: bias_0, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: squeeze, layer type: Reshape, input shape: [[None, 16, 16, 1]]
+Layer name: add, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_1, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: softmax_0, layer type: Softmax, input shape: [[None, 16, 16]]
+Layer name: einsum_1, layer type: Einsum, input shape: [[None, 16, 16], [None, 16, 8]]
+Layer name: q_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: einsum_2, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: bias_1, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: squeeze_1, layer type: Reshape, input shape: [[None, 16, 16, 1]]
+Layer name: add_2, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_3, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: softmax_1, layer type: Softmax, input shape: [[None, 16, 16]]
+Layer name: einsum_3, layer type: Einsum, input shape: [[None, 16, 16], [None, 16, 8]]
+Layer name: out_0, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: out_1, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: add_4, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_5, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: ff1_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: ff_act_0, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: ff2_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: add_6, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: einsum_4, layer type: Einsum, input shape: [[None, 16, 16], [None, 16]]
+Layer name: head1, layer type: Dense, input shape: [[None, 16]]
+Layer name: head_act, layer type: Activation, input shape: [[None, 16]]
+Layer name: head2, layer type: Dense, input shape: [[None, 16]]
+Interpreting Model ...
+Topology:
+Layer name: embed, layer type: Dense, input shape: [[None, 16, 10]]
+Layer name: embed_act, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: pair, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: pair_act, layer type: Activation, input shape: [[None, 16, 16, 4]]
+Layer name: q_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: einsum, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: bias_0, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: squeeze, layer type: Reshape, input shape: [[None, 16, 16, 1]]
+Layer name: add, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_1, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: softmax_0, layer type: Softmax, input shape: [[None, 16, 16]]
+Layer name: einsum_1, layer type: Einsum, input shape: [[None, 16, 16], [None, 16, 8]]
+Layer name: q_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: einsum_2, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: bias_1, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: squeeze_1, layer type: Reshape, input shape: [[None, 16, 16, 1]]
+Layer name: add_2, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_3, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: softmax_1, layer type: Softmax, input shape: [[None, 16, 16]]
+Layer name: einsum_3, layer type: Einsum, input shape: [[None, 16, 16], [None, 16, 8]]
+Layer name: out_0, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: out_1, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: add_4, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_5, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: ff1_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: ff_act_0, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: ff2_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: add_6, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: einsum_4, layer type: Einsum, input shape: [[None, 16, 16], [None, 16]]
+Layer name: head1, layer type: Dense, input shape: [[None, 16]]
+Layer name: head_act, layer type: Activation, input shape: [[None, 16]]
+Layer name: head2, layer type: Dense, input shape: [[None, 16]]
+Interpreting Model ...
+Topology:
+Layer name: embed, layer type: Dense, input shape: [[None, 16, 10]]
+Layer name: embed_act, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: pair, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: pair_act, layer type: Activation, input shape: [[None, 16, 16, 4]]
+Layer name: q_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: einsum, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: bias_0, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: squeeze, layer type: Reshape, input shape: [[None, 16, 16, 1]]
+Layer name: add, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_1, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: softmax_0, layer type: Softmax, input shape: [[None, 16, 16]]
+Layer name: einsum_1, layer type: Einsum, input shape: [[None, 16, 16], [None, 16, 8]]
+Layer name: q_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: einsum_2, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: bias_1, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: squeeze_1, layer type: Reshape, input shape: [[None, 16, 16, 1]]
+Layer name: add_2, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_3, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: softmax_1, layer type: Softmax, input shape: [[None, 16, 16]]
+Layer name: einsum_3, layer type: Einsum, input shape: [[None, 16, 16], [None, 16, 8]]
+Layer name: out_0, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: out_1, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: add_4, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_5, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: ff1_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: ff_act_0, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: ff2_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: add_6, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: einsum_4, layer type: Einsum, input shape: [[None, 16, 16], [None, 16]]
+Layer name: head1, layer type: Dense, input shape: [[None, 16]]
+Layer name: head_act, layer type: Activation, input shape: [[None, 16]]
+Layer name: head2, layer type: Dense, input shape: [[None, 16]]
+Interpreting Model ...
+Topology:
+Layer name: embed, layer type: Dense, input shape: [[None, 16, 10]]
+Layer name: embed_act, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: pair, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: pair_act, layer type: Activation, input shape: [[None, 16, 16, 4]]
+Layer name: q_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: einsum, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: bias_0, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: squeeze, layer type: Reshape, input shape: [[None, 16, 16, 1]]
+Layer name: add, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_1, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: softmax_0, layer type: Softmax, input shape: [[None, 16, 16]]
+Layer name: einsum_1, layer type: Einsum, input shape: [[None, 16, 16], [None, 16, 8]]
+Layer name: q_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: einsum_2, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: bias_1, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: squeeze_1, layer type: Reshape, input shape: [[None, 16, 16, 1]]
+Layer name: add_2, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_3, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: softmax_1, layer type: Softmax, input shape: [[None, 16, 16]]
+Layer name: einsum_3, layer type: Einsum, input shape: [[None, 16, 16], [None, 16, 8]]
+Layer name: out_0, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: out_1, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: add_4, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_5, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: ff1_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: ff_act_0, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: ff2_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: add_6, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: einsum_4, layer type: Einsum, input shape: [[None, 16, 16], [None, 16]]
+Layer name: head1, layer type: Dense, input shape: [[None, 16]]
+Layer name: head_act, layer type: Activation, input shape: [[None, 16]]
+Layer name: head2, layer type: Dense, input shape: [[None, 16]]
+{"variant": "gds_l1_nogate", "params": 2280, "n_jets": 20000, "acc_torch_baked": 0.6395, "acc_torch_qat": 0.6393, "acc_hls": 0.6534, "hls_vs_qat_argmax_agree": 0.975, "hls_vs_qat_max_abs_logit_diff": 2.01123046875, "teacher_agree_hls": 0.7277, "sec": 61.777135133743286}
+Interpreting Model ...
+Topology:
+Layer name: embed, layer type: Dense, input shape: [[None, 16, 10]]
+Layer name: embed_act, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: pair, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: pair_act, layer type: Activation, input shape: [[None, 16, 16, 4]]
+Layer name: einsum, layer type: Einsum, input shape: [[None, 16, 16, 4], [None, 16]]
+Layer name: q_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: gq_0, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gq_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: gk_0, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gk_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_1, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: einsum_1, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: bias_0, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: squeeze, layer type: Reshape, input shape: [[None, 16, 16, 1]]
+Layer name: add, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_1, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: softmax_0, layer type: Softmax, input shape: [[None, 16, 16]]
+Layer name: einsum_2, layer type: Einsum, input shape: [[None, 16, 16], [None, 16, 8]]
+Layer name: q_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: gq_1, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gq_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_2, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: gk_1, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gk_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_3, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: einsum_3, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: bias_1, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: squeeze_1, layer type: Reshape, input shape: [[None, 16, 16, 1]]
+Layer name: add_2, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_3, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: softmax_1, layer type: Softmax, input shape: [[None, 16, 16]]
+Layer name: einsum_4, layer type: Einsum, input shape: [[None, 16, 16], [None, 16, 8]]
+Layer name: out_0, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: out_1, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: add_4, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_5, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: ff1_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: ff_act_0, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: ff2_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: add_6, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: einsum_5, layer type: Einsum, input shape: [[None, 16, 16], [None, 16]]
+Layer name: head1, layer type: Dense, input shape: [[None, 16]]
+Layer name: head_act, layer type: Activation, input shape: [[None, 16]]
+Layer name: head2, layer type: Dense, input shape: [[None, 16]]
+Interpreting Model ...
+Topology:
+Layer name: embed, layer type: Dense, input shape: [[None, 16, 10]]
+Layer name: embed_act, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: pair, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: pair_act, layer type: Activation, input shape: [[None, 16, 16, 4]]
+Layer name: einsum, layer type: Einsum, input shape: [[None, 16, 16, 4], [None, 16]]
+Layer name: q_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: gq_0, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gq_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: gk_0, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gk_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_1, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: einsum_1, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: bias_0, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: squeeze, layer type: Reshape, input shape: [[None, 16, 16, 1]]
+Layer name: add, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_1, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: softmax_0, layer type: Softmax, input shape: [[None, 16, 16]]
+Layer name: einsum_2, layer type: Einsum, input shape: [[None, 16, 16], [None, 16, 8]]
+Layer name: q_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: gq_1, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gq_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_2, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: gk_1, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gk_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_3, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: einsum_3, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: bias_1, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: squeeze_1, layer type: Reshape, input shape: [[None, 16, 16, 1]]
+Layer name: add_2, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_3, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: softmax_1, layer type: Softmax, input shape: [[None, 16, 16]]
+Layer name: einsum_4, layer type: Einsum, input shape: [[None, 16, 16], [None, 16, 8]]
+Layer name: out_0, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: out_1, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: add_4, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_5, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: ff1_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: ff_act_0, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: ff2_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: add_6, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: einsum_5, layer type: Einsum, input shape: [[None, 16, 16], [None, 16]]
+Layer name: head1, layer type: Dense, input shape: [[None, 16]]
+Layer name: head_act, layer type: Activation, input shape: [[None, 16]]
+Layer name: head2, layer type: Dense, input shape: [[None, 16]]
+Interpreting Model ...
+Topology:
+Layer name: embed, layer type: Dense, input shape: [[None, 16, 10]]
+Layer name: embed_act, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: pair, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: pair_act, layer type: Activation, input shape: [[None, 16, 16, 4]]
+Layer name: einsum, layer type: Einsum, input shape: [[None, 16, 16, 4], [None, 16]]
+Layer name: q_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: gq_0, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gq_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: gk_0, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gk_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_1, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: einsum_1, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: bias_0, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: squeeze, layer type: Reshape, input shape: [[None, 16, 16, 1]]
+Layer name: add, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_1, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: softmax_0, layer type: Softmax, input shape: [[None, 16, 16]]
+Layer name: einsum_2, layer type: Einsum, input shape: [[None, 16, 16], [None, 16, 8]]
+Layer name: q_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: gq_1, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gq_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_2, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: gk_1, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gk_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_3, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: einsum_3, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: bias_1, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: squeeze_1, layer type: Reshape, input shape: [[None, 16, 16, 1]]
+Layer name: add_2, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_3, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: softmax_1, layer type: Softmax, input shape: [[None, 16, 16]]
+Layer name: einsum_4, layer type: Einsum, input shape: [[None, 16, 16], [None, 16, 8]]
+Layer name: out_0, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: out_1, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: add_4, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_5, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: ff1_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: ff_act_0, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: ff2_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: add_6, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: einsum_5, layer type: Einsum, input shape: [[None, 16, 16], [None, 16]]
+Layer name: head1, layer type: Dense, input shape: [[None, 16]]
+Layer name: head_act, layer type: Activation, input shape: [[None, 16]]
+Layer name: head2, layer type: Dense, input shape: [[None, 16]]
+Interpreting Model ...
+Topology:
+Layer name: embed, layer type: Dense, input shape: [[None, 16, 10]]
+Layer name: embed_act, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: pair, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: pair_act, layer type: Activation, input shape: [[None, 16, 16, 4]]
+Layer name: einsum, layer type: Einsum, input shape: [[None, 16, 16, 4], [None, 16]]
+Layer name: q_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: gq_0, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gq_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: gk_0, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gk_act_0, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_1, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: einsum_1, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: bias_0, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: squeeze, layer type: Reshape, input shape: [[None, 16, 16, 1]]
+Layer name: add, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_1, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: softmax_0, layer type: Softmax, input shape: [[None, 16, 16]]
+Layer name: einsum_2, layer type: Einsum, input shape: [[None, 16, 16], [None, 16, 8]]
+Layer name: q_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: k_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: v_1, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: gq_1, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gq_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_2, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: gk_1, layer type: Dense, input shape: [[None, 16, 4]]
+Layer name: gk_act_1, layer type: Activation, input shape: [[None, 16, 8]]
+Layer name: mul_3, layer type: Merge, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: einsum_3, layer type: Einsum, input shape: [[None, 16, 8], [None, 16, 8]]
+Layer name: bias_1, layer type: Dense, input shape: [[None, 16, 16, 4]]
+Layer name: squeeze_1, layer type: Reshape, input shape: [[None, 16, 16, 1]]
+Layer name: add_2, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_3, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: softmax_1, layer type: Softmax, input shape: [[None, 16, 16]]
+Layer name: einsum_4, layer type: Einsum, input shape: [[None, 16, 16], [None, 16, 8]]
+Layer name: out_0, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: out_1, layer type: Dense, input shape: [[None, 16, 8]]
+Layer name: add_4, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: add_5, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: ff1_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: ff_act_0, layer type: Activation, input shape: [[None, 16, 16]]
+Layer name: ff2_0, layer type: Dense, input shape: [[None, 16, 16]]
+Layer name: add_6, layer type: Merge, input shape: [[None, 16, 16], [None, 16, 16]]
+Layer name: einsum_5, layer type: Einsum, input shape: [[None, 16, 16], [None, 16]]
+Layer name: head1, layer type: Dense, input shape: [[None, 16]]
+Layer name: head_act, layer type: Activation, input shape: [[None, 16]]
+Layer name: head2, layer type: Dense, input shape: [[None, 16]]
+{"variant": "gds_l1_softmax", "params": 2440, "n_jets": 20000, "acc_torch_baked": 0.62195, "acc_torch_qat": 0.6218, "acc_hls": 0.6395, "hls_vs_qat_argmax_agree": 0.97005, "hls_vs_qat_max_abs_logit_diff": 16.015213012695312, "teacher_agree_hls": 0.71795, "sec": 65.9831132888794}
+Interpreting Model ...
+Topology:
+Layer name: flatten, layer type: Reshape, input shape: [[None, 16, 10]]
+Layer name: fc_0, layer type: Dense, input shape: [[None, np.int64(160)]]
+Layer name: act_0, layer type: Activation, input shape: [[None, 64]]
+Layer name: fc_1, layer type: Dense, input shape: [[None, 64]]
+Layer name: act_1, layer type: Activation, input shape: [[None, 32]]
+Layer name: fc_2, layer type: Dense, input shape: [[None, 32]]
+Layer name: act_2, layer type: Activation, input shape: [[None, 32]]
+Layer name: out, layer type: Dense, input shape: [[None, 32]]
+Interpreting Model ...
+Topology:
+Layer name: flatten, layer type: Reshape, input shape: [[None, 16, 10]]
+Layer name: fc_0, layer type: Dense, input shape: [[None, np.int64(160)]]
+Layer name: act_0, layer type: Activation, input shape: [[None, 64]]
+Layer name: fc_1, layer type: Dense, input shape: [[None, 64]]
+Layer name: act_1, layer type: Activation, input shape: [[None, 32]]
+Layer name: fc_2, layer type: Dense, input shape: [[None, 32]]
+Layer name: act_2, layer type: Activation, input shape: [[None, 32]]
+Layer name: out, layer type: Dense, input shape: [[None, 32]]
+Interpreting Model ...
+Topology:
+Layer name: flatten, layer type: Reshape, input shape: [[None, 16, 10]]
+Layer name: fc_0, layer type: Dense, input shape: [[None, np.int64(160)]]
+Layer name: act_0, layer type: Activation, input shape: [[None, 64]]
+Layer name: fc_1, layer type: Dense, input shape: [[None, 64]]
+Layer name: act_1, layer type: Activation, input shape: [[None, 32]]
+Layer name: fc_2, layer type: Dense, input shape: [[None, 32]]
+Layer name: act_2, layer type: Activation, input shape: [[None, 32]]
+Layer name: out, layer type: Dense, input shape: [[None, 32]]
+Interpreting Model ...
+Topology:
+Layer name: flatten, layer type: Reshape, input shape: [[None, 16, 10]]
+Layer name: fc_0, layer type: Dense, input shape: [[None, np.int64(160)]]
+Layer name: act_0, layer type: Activation, input shape: [[None, 64]]
+Layer name: fc_1, layer type: Dense, input shape: [[None, 64]]
+Layer name: act_1, layer type: Activation, input shape: [[None, 32]]
+Layer name: fc_2, layer type: Dense, input shape: [[None, 32]]
+Layer name: act_2, layer type: Activation, input shape: [[None, 32]]
+Layer name: out, layer type: Dense, input shape: [[None, 32]]
+{"variant": "mlp", "params": 13770, "n_jets": 20000, "acc_torch_baked": 0.61785, "acc_torch_qat": 0.6179, "acc_hls": 0.61815, "hls_vs_qat_argmax_agree": 0.999, "hls_vs_qat_max_abs_logit_diff": 0.041839599609375, "teacher_agree_hls": 0.69935, "sec": 17.82402014732361}
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+[NbConvertApp] Converting notebook __script__.ipynb to html
+[NbConvertApp] Writing 474369 bytes to __results__.html
+
