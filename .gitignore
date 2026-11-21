@@ -11,3 +11,4 @@ outputs/
 hls/results*/prj/
 kout/
 _cache/
+!results/**/students/*.pt
